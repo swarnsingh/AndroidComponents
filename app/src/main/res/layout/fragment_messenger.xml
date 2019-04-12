@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
+              android:padding="16dp"
+              android:gravity="center"
+              tools:context=".fragment.MessengerServiceFragment">
+
+    <TextView
+            android:id="@+id/random_no_txt_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="Random No."/>
+
+    <Button
+            android:id="@+id/bind_service_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Bind Service"/>
+
+    <Button
+            android:id="@+id/unbind_service_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="UnBind Service"/>
+
+    <Button
+            android:id="@+id/get_random_no_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Get Random No."/>
+
+
+</LinearLayout>

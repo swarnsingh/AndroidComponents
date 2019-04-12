@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          package="com.swarn.androidcomponents">
+
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <application
+            android:allowBackup="true"
+            android:icon="@mipmap/ic_launcher"
+            android:label="@string/app_name"
+            android:roundIcon="@mipmap/ic_launcher_round"
+            android:supportsRtl="true"
+            android:theme="@style/AppTheme">
+
+        <receiver
+                android:name=".receiver.BroadCastReceiver2"
+                android:enabled="true"
+                android:exported="false">
+            <intent-filter android:priority="1">
+                <action android:name="com.BroadCastReceiver2"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </receiver>
+        <receiver
+                android:name=".receiver.BroadCastReceiver1"
+                android:enabled="true"
+                android:exported="false">
+            <intent-filter android:priority="2">
+                <action android:name="com.BroadCastReceiver1"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </receiver>
+        <receiver
+                android:name=".receiver.PowerConnectionReceiver"
+                android:enabled="true">
+        </receiver>
+
+        <activity
+                android:name=".SendActivity"
+                android:label="@string/title_activity_send"
+                android:theme="@style/AppTheme.NoActionBar">
+        </activity>
+        <activity
+                android:name=".MainActivity"
+                android:label="@string/app_name"
+                android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+
+        <service
+                android:name=".service.MyForegroundService"
+                android:exported="false">
+        </service>
+        <service
+                android:name=".service.MyIntentService"
+                android:exported="false">
+        </service>
+        <service
+                android:name=".service.MyService"
+                android:exported="false"/>
+        <service
+                android:name=".service.MyJobIntentService"
+                android:permission="android.permission.BIND_JOB_SERVICE">
+        </service>
+
+        <service
+                android:name=".service.JobSchedulerService"
+                android:enabled="true"
+                android:permission="android.permission.BIND_JOB_SERVICE"
+                android:exported="false">
+        </service>
+    </application>
+
+</manifest>
