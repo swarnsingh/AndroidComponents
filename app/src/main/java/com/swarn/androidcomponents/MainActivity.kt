@@ -163,6 +163,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             R.id.nav_work_manager -> {
                 navigateFragment(WorkManagerFragment(), true)
             }
+            R.id.nav_okhttp -> {
+                navigateFragment(OkHttpFragment(), true)
+            }
             R.id.nav_share -> {
                 navigateFragment(MessengerServiceFragment(), true)
             }

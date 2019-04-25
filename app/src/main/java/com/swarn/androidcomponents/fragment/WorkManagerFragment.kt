@@ -9,9 +9,11 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.work.Data
 import androidx.work.OneTimeWorkRequest
 import androidx.work.WorkManager
 import com.swarn.androidcomponents.R
+import com.swarn.androidcomponents.background.EXTRA_OUTPUT_MESSAGE
 import com.swarn.androidcomponents.background.MyWorkManager
 
 
@@ -19,6 +21,8 @@ import com.swarn.androidcomponents.background.MyWorkManager
  * A simple [Fragment] subclass.
  *
  */
+const val TASK_KEY = "TASK_KEY"
+
 class WorkManagerFragment : Fragment() {
 
     private lateinit var startWorkManagerBtn: Button
@@ -40,7 +44,13 @@ class WorkManagerFragment : Fragment() {
 
         workManagerStatusTxtView = activity!!.findViewById(R.id.work_status_txt_view)
 
-        val workRequest = OneTimeWorkRequest.Builder(MyWorkManager::class.java).build()
+        val data = Data.Builder()
+            .putString(TASK_KEY, "I am sending the data")
+            .build()
+
+        val workRequest = OneTimeWorkRequest.Builder(MyWorkManager::class.java)
+            .setInputData(data)
+            .build()
 
         startWorkManagerBtn.setOnClickListener {
             WorkManager.getInstance().enqueue(workRequest)
@@ -49,6 +59,10 @@ class WorkManagerFragment : Fragment() {
         WorkManager.getInstance().getWorkInfoByIdLiveData(workRequest.id)
             .observe(this, Observer {
                 workManagerStatusTxtView.append(it.state.name + "\n")
+
+                if (it != null && it.state.isFinished) {
+                    workManagerStatusTxtView.append(it.outputData.getString(EXTRA_OUTPUT_MESSAGE))
+                }
             })
     }
 

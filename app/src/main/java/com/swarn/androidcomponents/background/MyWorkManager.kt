@@ -5,22 +5,32 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
 import androidx.core.app.NotificationCompat
+import androidx.work.Data
 import androidx.work.Worker
 import androidx.work.WorkerParameters
+import com.swarn.androidcomponents.fragment.TASK_KEY
 
 
 /**
  * @author Swarn Singh.
  */
+const val EXTRA_OUTPUT_MESSAGE: String = "EXTRA_OUTPUT_MESSAGE"
+
 class MyWorkManager(appContext: Context, workerParams: WorkerParameters) : Worker(appContext, workerParams) {
 
     override fun doWork(): Result {
-        displayNotification("My Worker", "Hey I finished my work")
-        return Result.success()
+        val data = inputData
+        displayNotification("My Worker", data.getString(TASK_KEY))
+
+        val output = Data.Builder()
+            .putString(EXTRA_OUTPUT_MESSAGE, "I have come from MyWorker!")
+            .build()
+
+        return Result.success(output)
     }
 
 
-    private fun displayNotification(title: String, task: String) {
+    private fun displayNotification(title: String, task: String?) {
         val notificationManager =
             applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
