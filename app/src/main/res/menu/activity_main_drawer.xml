@@ -24,7 +24,7 @@
         <item
                 android:id="@+id/nav_job_scheduler"
                 android:icon="@android:drawable/ic_lock_idle_charging"
-                android:title="Job Sceduler"/>
+                android:title="Job Scheduler"/>
 
         <item
                 android:id="@+id/nav_work_manager"
@@ -35,6 +35,21 @@
                 android:id="@+id/nav_okhttp"
                 android:title="OkHttp"
                 android:icon="@android:drawable/ic_menu_gallery"/>
+
+        <item
+                android:id="@+id/nav_retrofit"
+                android:title="Retrofit"
+                android:icon="@android:drawable/ic_menu_recent_history"/>
+
+        <item
+                android:id="@+id/nav_rx_java"
+                android:title="RxJava2"
+                android:icon="@android:drawable/ic_menu_rotate"/>
+
+        <item
+                android:id="@+id/nav_google_map"
+                android:title="Google Map"
+                android:icon="@android:drawable/ic_dialog_map"/>
     </group>
 
     <item android:title="Communicate">

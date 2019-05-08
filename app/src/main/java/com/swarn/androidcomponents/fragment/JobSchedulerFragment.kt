@@ -48,7 +48,7 @@ class JobSchedulerFragment : Fragment() {
                 .setPeriodic(TimeUnit.MINUTES.toMillis(15))
                 .build()
 
-            var jobScheduler: JobScheduler = activity!!.getSystemService(JOB_SCHEDULER_SERVICE) as JobScheduler
+            var jobScheduler = activity!!.getSystemService(JOB_SCHEDULER_SERVICE) as JobScheduler
             var resultCode = jobScheduler.schedule(jobInfo)
 
             if (resultCode == JobScheduler.RESULT_SUCCESS) {

@@ -56,20 +56,20 @@ class OkHttpFragment : Fragment() {
 
             override fun onResponse(call: Call, response: Response) {
                 response.use {
-                    val value = response.body()?.string()
-                    val gson = GsonBuilder().create()
 
-                    val okHttpData = gson.fromJson<OkHttpData>(value, OkHttpData::class.java)
+                    if (response.isSuccessful) {
+                        val value = response.body()?.string()
+                        val gson = GsonBuilder().create()
+
+                        val okHttpData = gson.fromJson<OkHttpData>(value, OkHttpData::class.java)
+                        Log.d(OkHttpFragment::class.java.canonicalName, okHttpData.toString())
+                    }
 
                     activity?.runOnUiThread {
                         mProgressBar.visibility = View.GONE
                     }
-
-                    Log.d(OkHttpFragment::class.java.canonicalName, okHttpData.toString())
                 }
             }
-
         })
-
     }
 }

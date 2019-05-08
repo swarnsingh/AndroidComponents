@@ -9,12 +9,14 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.work.Data
-import androidx.work.OneTimeWorkRequest
+import androidx.work.Constraints
+import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
+import androidx.work.workDataOf
 import com.swarn.androidcomponents.R
 import com.swarn.androidcomponents.background.EXTRA_OUTPUT_MESSAGE
 import com.swarn.androidcomponents.background.MyWorkManager
+import java.util.concurrent.TimeUnit
 
 
 /**
@@ -44,12 +46,17 @@ class WorkManagerFragment : Fragment() {
 
         workManagerStatusTxtView = activity!!.findViewById(R.id.work_status_txt_view)
 
-        val data = Data.Builder()
-            .putString(TASK_KEY, "I am sending the data")
+        val data = workDataOf(TASK_KEY to "I am sending the data")
+
+        val constraints = Constraints.Builder()
+            .setRequiresCharging(true)
             .build()
 
-        val workRequest = OneTimeWorkRequest.Builder(MyWorkManager::class.java)
+
+        val workRequest = OneTimeWorkRequestBuilder<MyWorkManager>()
             .setInputData(data)
+            .setConstraints(constraints)
+            .setInitialDelay(5, TimeUnit.SECONDS)
             .build()
 
         startWorkManagerBtn.setOnClickListener {

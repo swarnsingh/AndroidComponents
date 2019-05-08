@@ -2,9 +2,11 @@ package com.swarn.androidcomponents.service
 
 import android.content.Context
 import android.content.Intent
+import android.os.Handler
 import android.os.SystemClock
-import androidx.core.app.JobIntentService
 import android.util.Log
+import android.widget.Toast
+import androidx.core.app.JobIntentService
 
 
 class MyJobIntentService : JobIntentService() {
@@ -44,6 +46,11 @@ class MyJobIntentService : JobIntentService() {
 
     override fun onDestroy() {
         super.onDestroy()
-        Log.d(TAG, "onDestroy");
+        Log.d(TAG, "onDestroy")
+
+        val mHandler = Handler()
+        mHandler.post {
+            Toast.makeText(this, "Job completed", Toast.LENGTH_LONG).show()
+        }
     }
 }

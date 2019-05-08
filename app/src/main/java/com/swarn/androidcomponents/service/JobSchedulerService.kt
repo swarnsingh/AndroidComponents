@@ -23,9 +23,10 @@ class JobSchedulerService : JobService() {
     }
 
     private fun doBackgroundWork(params: JobParameters?) {
-        Log.d(TAG, "Job Running on Thread ID : ${Thread.currentThread().id}")
 
         Thread(Runnable {
+            Log.d(TAG, "Job Running on Thread ID : ${Thread.currentThread().id}")
+
             for (i in 1..10) {
                 Log.d(TAG, " run : $i")
 

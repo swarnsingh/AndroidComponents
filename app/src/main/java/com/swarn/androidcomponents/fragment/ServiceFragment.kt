@@ -12,6 +12,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.swarn.androidcomponents.R
 import com.swarn.androidcomponents.service.MyService
@@ -144,6 +145,7 @@ class ServiceFragment : androidx.fragment.app.Fragment(), View.OnClickListener {
             import_txt_view.text = myService?.getRandomNumber().toString()
         } else {
             import_txt_view.text = "on Service Not Bound"
+            Toast.makeText(activity!!, "Service is not bounded", Toast.LENGTH_SHORT).show()
         }
     }
 

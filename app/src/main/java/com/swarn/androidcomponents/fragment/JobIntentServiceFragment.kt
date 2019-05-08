@@ -56,6 +56,4 @@ class JobIntentServiceFragment : androidx.fragment.app.Fragment() {
             MyJobIntentService.enqueueWork(activity!!, serviceIntent)
         }
     }
-
-
 }

@@ -1,5 +1,7 @@
 package com.swarn.androidcomponents
 
+import android.app.Activity
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -12,12 +14,14 @@ import androidx.core.view.GravityCompat
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
 import com.swarn.androidcomponents.fragment.*
+import com.swarn.androidcomponents.util.GPS_REQUEST
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener,
     ServiceFragment.OnFragmentInteractionListener, IntentServiceFragment.OnFragmentInteractionListener {
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -95,15 +99,15 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         Log.d(MainActivity::class.java.canonicalName, "onRestoreInstanceState " + savedInstanceState?.getString("KEY"))
     }
 
-    /*// invoked when the activity may be temporarily destroyed, save the instance state here
-    override fun onSaveInstanceState(outState: Bundle?) {
+    // invoked when the activity may be temporarily destroyed, save the instance state here
+    override fun onSaveInstanceState(outState: Bundle) {
         outState?.putString("KEY", "123")
 
         // call superclass to save any view hierarchy
-        super.onSaveInstanceState(outState)
 
         Log.d(MainActivity::class.java.canonicalName, "onSaveInstanceState")
-    }*/
+        super.onSaveInstanceState(outState)
+    }
 
     override fun onBackPressed() {
         if (drawer_layout.isDrawerOpen(GravityCompat.START)) {
@@ -166,6 +170,15 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             R.id.nav_okhttp -> {
                 navigateFragment(OkHttpFragment(), true)
             }
+            R.id.nav_retrofit -> {
+                navigateFragment(RetrofitFragment(), true)
+            }
+            R.id.nav_rx_java -> {
+                navigateFragment(RxFragment(), true)
+            }
+            R.id.nav_google_map -> {
+                navigateFragment(GoogleMapFragment(), true)
+            }
             R.id.nav_share -> {
                 navigateFragment(MessengerServiceFragment(), true)
             }
@@ -176,5 +189,23 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         drawer_layout.closeDrawer(GravityCompat.START)
         return true
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == GPS_REQUEST) {
+                Log.d(MainActivity::class.java.canonicalName, GPS_REQUEST.toString())
+
+                val googleMapFragment =
+                    supportFragmentManager.findFragmentById(R.id.frame_container) as GoogleMapFragment
+                googleMapFragment.updateLocationUI()
+            }
+        }
     }
 }

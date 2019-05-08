@@ -56,21 +56,15 @@ class MyIntentService : IntentService("MyIntentService") {
             } catch (e: InterruptedException) {
                 Log.d(TAG, "Thread Interrupted")
             }
-
         }
     }
-
 
     private fun stopRandomNumberGenerator() {
         mIsRandomGeneratorOn = false
     }
 
     fun getRandomNumber(): Int {
-        return if (mRandomNumber != 0) {
-            mRandomNumber
-        } else {
-            Random().nextInt(MAX) + MIN
-        }
+        return mRandomNumber
     }
 
     override fun onDestroy() {

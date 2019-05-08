@@ -27,7 +27,6 @@ class MyService : Service() {
 
     private val randomNumberMessenger = Messenger(RandomNumberRequestHandler())
 
-
     override fun onCreate() {
         super.onCreate()
     }
@@ -51,7 +50,7 @@ class MyService : Service() {
     private fun startRandomNumberGenerator() {
         while (mIsRandomGeneratorOn) {
             try {
-                Thread.sleep(1000)
+                Thread.sleep(2000)
                 if (mIsRandomGeneratorOn) {
                     mRandomNumber = Random().nextInt(MAX) + MIN
                     Log.d(TAG, "on Thread id: " + Thread.currentThread().id + ", Random Number: " + mRandomNumber)
@@ -59,7 +58,6 @@ class MyService : Service() {
             } catch (e: InterruptedException) {
                 Log.d(TAG, "Thread Interrupted")
             }
-
         }
     }
 
@@ -69,11 +67,7 @@ class MyService : Service() {
     }
 
     fun getRandomNumber(): Int {
-        return if (mRandomNumber != 0) {
-            mRandomNumber
-        } else {
-            Random().nextInt(MAX) + MIN
-        }
+        return mRandomNumber
     }
 
     override fun onDestroy() {
@@ -88,7 +82,7 @@ class MyService : Service() {
         //stopSelf()
         mIsRandomGeneratorOn = true
         Thread(Runnable { startRandomNumberGenerator() }).start()
-        return Service.START_STICKY
+        return START_STICKY
     }
 
     @SuppressLint("HandlerLeak")
