@@ -101,7 +101,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     // invoked when the activity may be temporarily destroyed, save the instance state here
     override fun onSaveInstanceState(outState: Bundle) {
-        outState?.putString("KEY", "123")
+        outState.putString("KEY", "123")
 
         // call superclass to save any view hierarchy
 
@@ -179,6 +179,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             R.id.nav_google_map -> {
                 navigateFragment(GoogleMapFragment(), true)
             }
+            R.id.nav_google_geofence_map -> {
+                navigateFragment(GeofencesFragment(), true)
+            }
+            R.id.nav_activity_recognition -> {
+                navigateFragment(ActivityRecognitionFragment(), true)
+            }
+
             R.id.nav_share -> {
                 navigateFragment(MessengerServiceFragment(), true)
             }

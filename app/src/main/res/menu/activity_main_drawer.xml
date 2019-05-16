@@ -50,6 +50,16 @@
                 android:id="@+id/nav_google_map"
                 android:title="Google Map"
                 android:icon="@android:drawable/ic_dialog_map"/>
+
+        <item
+                android:id="@+id/nav_google_geofence_map"
+                android:title="Google Map Geofences"
+                android:icon="@android:drawable/ic_menu_mapmode"/>
+
+        <item
+                android:id="@+id/nav_activity_recognition"
+                android:title="Activity Recognition"
+                android:icon="@android:drawable/ic_menu_compass"/>
     </group>
 
     <item android:title="Communicate">

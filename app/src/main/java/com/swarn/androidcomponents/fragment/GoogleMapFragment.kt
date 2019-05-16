@@ -3,9 +3,10 @@ package com.swarn.androidcomponents.fragment
 
 import android.annotation.SuppressLint
 import android.app.AlertDialog
-import android.content.ContentValues.TAG
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.location.Address
+import android.location.Geocoder
 import android.location.Location
 import android.net.Uri.fromParts
 import android.os.Bundle
@@ -27,13 +28,22 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import com.swarn.androidcomponents.R
-import com.swarn.androidcomponents.util.PermissionUtils
+import com.swarn.androidcomponents.util.ConnectivityManager
 import com.swarn.androidcomponents.util.GpsUtil
+import com.swarn.androidcomponents.util.PermissionUtils
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.util.*
 
 
 const val PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 100
 
-class GoogleMapFragment : Fragment(), OnMapReadyCallback, LocationListener {
+/**
+ * @author Swarn Singh.
+ */
+class GoogleMapFragment : Fragment(), OnMapReadyCallback {
 
     private var isGPS: Boolean = false
     private var mLocationPermissionGranted = false
@@ -48,6 +58,9 @@ class GoogleMapFragment : Fragment(), OnMapReadyCallback, LocationListener {
 
     private var googleMap: GoogleMap? = null
 
+    private val TAG = GoogleMapFragment::class.java.canonicalName
+
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -60,6 +73,12 @@ class GoogleMapFragment : Fragment(), OnMapReadyCallback, LocationListener {
         super.onActivityCreated(savedInstanceState)
 
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(activity!!)
+
+        locationRequest = LocationRequest.create().apply {
+            priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+            interval = 15 * 1000
+            fastestInterval = 10 * 1000 //  to set an upper limit to the update rate
+        }
 
         locationCallback = initLocationCallback()
 
@@ -77,6 +96,8 @@ class GoogleMapFragment : Fragment(), OnMapReadyCallback, LocationListener {
     override fun onPause() {
         super.onPause()
 
+        mFusedLocationClient.removeLocationUpdates(locationCallback)
+
         if (::alertDialog.isInitialized) {
             alertDialog.dismiss()
         }
@@ -85,14 +106,7 @@ class GoogleMapFragment : Fragment(), OnMapReadyCallback, LocationListener {
     override fun onMapReady(map: GoogleMap?) {
         googleMap = map
 
-        locationRequest = LocationRequest.create()
-        locationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
-        locationRequest.interval = 20 * 1000 // 10 seconds
-        //locationRequest.fastestInterval = 5 * 1000; // 5 seconds
-
         updateLocationUI()
-
-        getDeviceLocation()
     }
 
     private fun initLocationCallback(): LocationCallback {
@@ -123,18 +137,40 @@ class GoogleMapFragment : Fragment(), OnMapReadyCallback, LocationListener {
         })
     }
 
-    private fun addMarker(currentLocation: Location) {
+    private fun getAddress(location: Location): Address? {
+        Log.d(
+            TAG,
+            "Current Thread in getAddress : ${Thread.currentThread().id}"
+        )
+
+        try {
+            if (ConnectivityManager.isConnected(activity!!.applicationContext)) {
+                val geocoder = Geocoder(activity?.applicationContext, Locale.getDefault())
+                val addresses = geocoder.getFromLocation(location.latitude, location.longitude, 1)
+                return addresses!![0]
+            }
+        } catch (e: Exception) {
+            Log.d(TAG, e.toString())
+        }
+        return null
+    }
+
+    private fun setMarker(currentLocation: Location, address: Address) {
+        Log.d(
+            TAG,
+            "Current Thread in setMarker : ${Thread.currentThread().id}"
+        )
         val latLng = LatLng(currentLocation.latitude, currentLocation.longitude)
-        markerOptions = MarkerOptions().position(latLng).title("Current Location")
+
+        val area = address.subAdminArea
 
         if (::marker.isInitialized) {
             marker.remove()
         }
 
-        marker = googleMap?.addMarker(
-            MarkerOptions().position(latLng)
-                .title("Current Location")
-        )!!
+        markerOptions = MarkerOptions().position(latLng).title("Your Location").snippet(address.getAddressLine(0))
+
+        marker = googleMap?.addMarker(markerOptions)!!
 
         googleMap?.moveCamera(
             CameraUpdateFactory.newLatLngZoom(
@@ -143,11 +179,10 @@ class GoogleMapFragment : Fragment(), OnMapReadyCallback, LocationListener {
         )
     }
 
-    override fun onLocationChanged(location: Location?) {
-        if (location != null) {
-            Log.d("onLocationChanged : ", location.toString())
-
-            addMarker(location)
+    private fun addMarker(currentLocation: Location) {
+        GlobalScope.launch(Dispatchers.Main) {
+            val address = withContext(Dispatchers.IO) { getAddress(currentLocation) }
+            address?.let { setMarker(currentLocation, it) }
         }
     }
 
@@ -173,34 +208,29 @@ class GoogleMapFragment : Fragment(), OnMapReadyCallback, LocationListener {
     }
 
     private fun getDeviceLocation() {
-        /*
-     * Get the best and most recent location of the device, which may be null in rare
-     * cases when a location is not available.
-     */
+
         try {
             if (mLocationPermissionGranted) {
-                val locationResult = mFusedLocationClient.lastLocation
+                mFusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, null)
 
-                locationResult.addOnCompleteListener {
-                    if (it.isSuccessful) {
+                mFusedLocationClient.lastLocation
+                    .addOnSuccessListener {
                         googleMap?.uiSettings?.isMyLocationButtonEnabled = true
-                        val mLastKnownLocation = it.result
 
-                        if (mLastKnownLocation != null) {
-                            addMarker(mLastKnownLocation)
+                        if (it != null) {
+                            addMarker(it)
                         }
-                    } else {
+                    }
+                    .addOnFailureListener {
                         Log.d(TAG, "Current location is null. Using defaults.")
-                        Log.e(TAG, "Exception: %s", it.exception)
+                        Log.e(TAG, "Exception: %s", it)
                         //googleMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(mDefaultLocation, DEFAULT_ZOOM))
                         googleMap?.uiSettings?.isMyLocationButtonEnabled = false
                     }
-                }
             }
         } catch (e: SecurityException) {
             Log.e("Exception: %s", e.message)
         }
-
     }
 
     private fun getLocationPermission() {
@@ -250,22 +280,25 @@ class GoogleMapFragment : Fragment(), OnMapReadyCallback, LocationListener {
     }
 
     private fun openApplicationDetailSettingDialog() {
-        val builder = AlertDialog.Builder(activity)
-
-        builder.setMessage(
-            "We need to use GPS Service to get the current location. Please permit the permission through "
-                    + "Settings screen.\n\nSelect Permissions -> Enable permission"
-        )
-        builder.setCancelable(false)
-        builder.setPositiveButton("Permit Manually") { dialog, _ ->
-            dialog.dismiss()
-            val intent = Intent()
-            intent.action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
-            val uri = fromParts("package", activity!!.packageName, null)
-            intent.data = uri
-            context?.startActivity(intent)
+        if (::alertDialog.isInitialized) {
+            alertDialog.dismiss()
         }
-        builder.setNegativeButton("Cancel", null)
+        val builder = AlertDialog.Builder(activity).apply {
+            setMessage(
+                "We need to use GPS Service to get the current location. Please permit the permission through "
+                        + "Settings screen.\n\nSelect Permissions -> Enable permission"
+            )
+            setCancelable(false)
+            setPositiveButton("Permit Manually") { dialog, _ ->
+                dialog.dismiss()
+                val intent = Intent()
+                intent.action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
+                val uri = fromParts("package", activity!!.packageName, null)
+                intent.data = uri
+                context?.startActivity(intent)
+            }
+            setNegativeButton("Cancel", null)
+        }
         alertDialog = builder.create()
         alertDialog.show()
     }
