@@ -147,7 +147,7 @@ class ActivityRecognitionFragment : Fragment() {
 
         mTracks.forEachIndexed { index, track ->
             if (activityMap.containsKey(track.type.toString())) {
-                track.confidence = activityMap.get(track.type.toString())!!
+                track.confidence = activityMap[track.type.toString()]!!
                 mTracks[index] = track
             }
         }

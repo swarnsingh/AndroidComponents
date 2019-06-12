@@ -54,7 +54,7 @@
         <receiver
                 android:name=".receiver.PowerConnectionReceiver"
                 android:enabled="true">
-        </receiver> <!-- TRANSITION RECOGNITION - BROADCAST RECEIVER -->
+        </receiver>
 
         <activity
                 android:name=".SendActivity"

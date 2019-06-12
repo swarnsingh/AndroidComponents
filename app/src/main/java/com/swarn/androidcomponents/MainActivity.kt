@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.speech.RecognizerIntent
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
@@ -11,25 +12,30 @@ import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
+import com.google.android.libraries.places.api.Places
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
 import com.swarn.androidcomponents.fragment.*
-import com.swarn.androidcomponents.util.GPS_REQUEST
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener,
-    ServiceFragment.OnFragmentInteractionListener, IntentServiceFragment.OnFragmentInteractionListener {
+    IntentServiceFragment.OnFragmentInteractionListener {
 
+    private val TAG = MainActivity::class.java.canonicalName
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.d(MainActivity::class.java.canonicalName, "onCreate")
+        Log.d(TAG, "onCreate")
 
         if (savedInstanceState != null) {
-            Log.d(MainActivity::class.java.canonicalName, "on savedInstanceState != null")
-            Log.d(MainActivity::class.java.canonicalName, "on " + savedInstanceState.getString("KEY"))
+            Log.d(TAG, "on savedInstanceState != null")
+            Log.d(TAG, "on " + savedInstanceState.getString("KEY"))
+        }
+
+        if (!Places.isInitialized()) {
+            Places.initialize(applicationContext, getString(R.string.google_maps_key))
         }
 
         setContentView(R.layout.activity_main)
@@ -55,38 +61,35 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         Toast.makeText(this, value, Toast.LENGTH_SHORT).show()
     }
 
-    override fun onFragmentInteraction(uri: Uri) {
-
-    }
 
     override fun onStart() {
         super.onStart()
-        Log.d(MainActivity::class.java.canonicalName, "onStart")
+        Log.d(TAG, "onStart")
     }
 
     override fun onResume() {
         super.onResume()
-        Log.d(MainActivity::class.java.canonicalName, "onResume")
+        Log.d(TAG, "onResume")
     }
 
     override fun onPause() {
         super.onPause()
-        Log.d(MainActivity::class.java.canonicalName, "onPause")
+        Log.d(TAG, "onPause")
     }
 
     override fun onRestart() {
         super.onRestart()
-        Log.d(MainActivity::class.java.canonicalName, "onReStart")
+        Log.d(TAG, "onReStart")
     }
 
     override fun onStop() {
         super.onStop()
-        Log.d(MainActivity::class.java.canonicalName, "onStop")
+        Log.d(TAG, "onStop")
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        Log.d(MainActivity::class.java.canonicalName, "onDestroy")
+        Log.d(TAG, "onDestroy")
     }
 
     /**
@@ -96,7 +99,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
      * The savedInstanceState Bundle is same as the one used in onCreate().
      */
     override fun onRestoreInstanceState(savedInstanceState: Bundle?) {
-        Log.d(MainActivity::class.java.canonicalName, "onRestoreInstanceState " + savedInstanceState?.getString("KEY"))
+        Log.d(TAG, ": onRestoreInstanceState " + savedInstanceState?.getString("KEY"))
     }
 
     // invoked when the activity may be temporarily destroyed, save the instance state here
@@ -105,7 +108,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         // call superclass to save any view hierarchy
 
-        Log.d(MainActivity::class.java.canonicalName, "onSaveInstanceState")
+        Log.d(TAG, ": onSaveInstanceState")
         super.onSaveInstanceState(outState)
     }
 
@@ -128,7 +131,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         return when (item.itemId) {
-            R.id.action_settings -> true
+            R.id.action_settings -> {
+                val intent = Intent(this, SendActivity::class.java)
+                startActivity(intent)
+                true
+            }
             else -> super.onOptionsItemSelected(item)
         }
     }
@@ -137,11 +144,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val fragmentManager = supportFragmentManager
         val fragmentTransaction = fragmentManager.beginTransaction()
 
+        fragmentTransaction.replace(R.id.frame_container, fragment, fragment::class.java.canonicalName)
+
         if (addToBackStack) {
-            fragmentTransaction.replace(R.id.frame_container, fragment, fragment::class.java.canonicalName)
             fragmentTransaction.addToBackStack(fragment::class.java.canonicalName)
-        } else {
-            fragmentTransaction.add(R.id.frame_container, fragment, fragment::class.java.canonicalName)
         }
         fragmentTransaction.commit()
     }
@@ -185,6 +191,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             R.id.nav_activity_recognition -> {
                 navigateFragment(ActivityRecognitionFragment(), true)
             }
+            R.id.nav_google_places -> {
+                navigateFragment(GooglePlacesFragment(), true)
+            }
 
             R.id.nav_share -> {
                 navigateFragment(MessengerServiceFragment(), true)
@@ -206,12 +215,20 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         super.onActivityResult(requestCode, resultCode, data)
 
         if (resultCode == Activity.RESULT_OK) {
-            if (requestCode == GPS_REQUEST) {
-                Log.d(MainActivity::class.java.canonicalName, GPS_REQUEST.toString())
+            if (requestCode == GPS_REQUEST_GOOGLE_MAP_FRAGMENT) {
 
                 val googleMapFragment =
                     supportFragmentManager.findFragmentById(R.id.frame_container) as GoogleMapFragment
                 googleMapFragment.updateLocationUI()
+            } else if (requestCode == GPS_REQUEST_GOOGLE_PLACES_FRAGMENT) {
+                val googlePlacesFragment =
+                    supportFragmentManager.findFragmentById(R.id.frame_container) as GooglePlacesFragment
+                googlePlacesFragment.updateLocationUI()
+            } else if (requestCode == REQUEST_SPEECH_RECOGNIZER) {
+                val results = data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
+                if (results != null && results.size > 0) {
+                    Log.d(TAG, results[0].toString())
+                }
             }
         }
     }

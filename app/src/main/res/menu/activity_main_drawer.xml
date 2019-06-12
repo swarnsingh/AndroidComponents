@@ -60,6 +60,11 @@
                 android:id="@+id/nav_activity_recognition"
                 android:title="Activity Recognition"
                 android:icon="@android:drawable/ic_menu_compass"/>
+
+        <item
+                android:id="@+id/nav_google_places"
+                android:title="Google Places"
+                android:icon="@android:drawable/ic_menu_compass"/>
     </group>
 
     <item android:title="Communicate">
@@ -74,5 +79,4 @@
                     android:title="Broadcast Receiver"/>
         </menu>
     </item>
-
 </menu>

@@ -39,6 +39,7 @@ import java.util.*
 
 
 const val PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 100
+const val GPS_REQUEST_GOOGLE_MAP_FRAGMENT: Int = 101
 
 /**
  * @author Swarn Singh.
@@ -134,7 +135,7 @@ class GoogleMapFragment : Fragment(), OnMapReadyCallback {
                     getDeviceLocation()
                 }
             }
-        })
+        }, GPS_REQUEST_GOOGLE_MAP_FRAGMENT)
     }
 
     private fun getAddress(location: Location): Address? {

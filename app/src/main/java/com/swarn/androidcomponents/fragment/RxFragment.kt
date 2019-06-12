@@ -14,13 +14,13 @@ import com.swarn.androidcomponents.adapter.OkHttpAdapter
 import com.swarn.androidcomponents.api.RxAPIClient
 import com.swarn.androidcomponents.api.RxService
 import com.swarn.androidcomponents.data.Post
-import io.reactivex.Flowable
+import io.reactivex.Observable
 import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
-import java.util.concurrent.TimeUnit
+import java.util.*
 
 
 /**
@@ -60,7 +60,7 @@ class RxFragment : Fragment() {
             .flatMap {
                 return@flatMap getComments(it)
             }
-            .toObservable()
+            .observeOn(AndroidSchedulers.mainThread())
             .subscribe(object : Observer<Post> {
                 override fun onComplete() {
 
@@ -71,8 +71,7 @@ class RxFragment : Fragment() {
                 }
 
                 override fun onNext(post: Post) {
-                    Log.d(RxFragment::class.java.canonicalName, post.toString())
-                    adapter!!.updatePost(post)
+                    updatePost(post)
                 }
 
                 override fun onError(e: Throwable) {
@@ -81,7 +80,34 @@ class RxFragment : Fragment() {
             })
     }
 
-    private fun getPosts(): Flowable<Post> {
+    private fun updatePost(post: Post) {
+        Observable
+            .fromIterable(adapter?.getPosts())
+            .filter {
+                return@filter post.id == it.id
+            }
+            .subscribe(object : Observer<Post> {
+                override fun onComplete() {
+
+                }
+
+                override fun onSubscribe(d: Disposable) {
+                    disposables.add(d)
+                }
+
+                override fun onNext(p: Post) {
+                    Log.d(RxFragment::class.java.canonicalName, "on Next updating post: ${p.id}")
+                    adapter!!.updatePost(p)
+                }
+
+                override fun onError(e: Throwable) {
+                    Log.e(RxFragment::class.java.canonicalName, "onError: ", e)
+                }
+
+            })
+    }
+
+    private fun getPosts(): Observable<Post> {
         rxService = RxAPIClient.createService(RxService::class.java)
 
         return rxService.getPosts()
@@ -89,23 +115,21 @@ class RxFragment : Fragment() {
             .observeOn(AndroidSchedulers.mainThread())
             .flatMap {
                 adapter?.setPosts(it)
-                return@flatMap Flowable.fromIterable(it)
+                return@flatMap Observable.fromIterable(it)
                     .subscribeOn(Schedulers.io())
-                    .delay(1000, TimeUnit.MILLISECONDS)
-                    .take(5)
             }
     }
 
-    private fun getComments(post: Post): Flowable<Post> {
+    private fun getComments(post: Post): Observable<Post> {
         return rxService.getComments(post.id)
             .subscribeOn(Schedulers.io())
             .map {
-                /*val delay = (Random().nextInt(5) + 1) * 1000 // sleep thread for x ms
+                val delay = (Random().nextInt(5) + 1) * 1000 // sleep thread for x ms
                 Thread.sleep(delay.toLong())
                 Log.d(
                     RxFragment::class.java.canonicalName,
                     "apply: sleeping thread " + Thread.currentThread().name + " for " + delay.toString() + "ms"
-                )*/
+                )
 
                 post.comments = it
                 return@map post

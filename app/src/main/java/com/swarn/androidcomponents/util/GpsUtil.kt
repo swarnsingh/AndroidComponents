@@ -14,7 +14,7 @@ import com.google.android.gms.location.*
 /**
  * @author Swarn Singh.
  */
-const val GPS_REQUEST: Int = 101
+
 
 class GpsUtil {
 
@@ -39,7 +39,7 @@ class GpsUtil {
     }
 
     // method for turn on GPS
-    fun turnGPSOn(OnGpsListener: OnGpsListener?) {
+    fun turnGPSOn(OnGpsListener: OnGpsListener?, requestCode: Int) {
 
         if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             OnGpsListener?.gpsStatus(true)
@@ -58,7 +58,7 @@ class GpsUtil {
                                 // Show the dialog by calling startResolutionForResult(), and check the
                                 // result in onActivityResult().
                                 val rae = e as ResolvableApiException
-                                rae.startResolutionForResult(context as Activity, GPS_REQUEST)
+                                rae.startResolutionForResult(context as Activity, requestCode)
                             } catch (sie: IntentSender.SendIntentException) {
                                 Log.i(TAG, "PendingIntent unable to execute request.")
                             }

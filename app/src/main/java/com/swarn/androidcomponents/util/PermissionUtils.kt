@@ -20,7 +20,7 @@ class PermissionUtils {
             val genPrefs = context.getSharedPreferences("GENERIC_PREFERENCES", Context.MODE_PRIVATE)
             val editor = genPrefs.edit()
             editor.putBoolean(permission.ACCESS_FINE_LOCATION, true)
-            editor.commit()
+            editor.apply()
         }
     }
 }

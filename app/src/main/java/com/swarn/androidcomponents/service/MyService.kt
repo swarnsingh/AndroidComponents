@@ -27,19 +27,10 @@ class MyService : Service() {
 
     private val randomNumberMessenger = Messenger(RandomNumberRequestHandler())
 
-    override fun onCreate() {
-        super.onCreate()
-    }
-
-    override fun onStart(intent: Intent?, startId: Int) {
-        super.onStart(intent, startId)
-    }
-
     override fun onBind(intent: Intent?): IBinder? {
         Log.d(TAG, "onBind")
         return mBinder
     }
-
 
     inner class MyServiceBinder : Binder() {
         fun getService(): MyService {

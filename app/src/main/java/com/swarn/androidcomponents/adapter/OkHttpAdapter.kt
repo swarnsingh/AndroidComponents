@@ -1,6 +1,5 @@
 package com.swarn.androidcomponents.adapter
 
-import android.app.Activity
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
@@ -62,15 +61,12 @@ class OkHttpAdapter(context: Context) : RecyclerView.Adapter<OkHttpAdapter.OkHtt
             title.text = post.title
 
             if (post.comments == null) {
-                (context as Activity)?.runOnUiThread {
-                    showProgressBar(true)
-                    numComments.text = ""
-                }
+                showProgressBar(true)
+                numComments.text = ""
+
             } else {
-                (context as Activity)?.runOnUiThread {
-                    showProgressBar(false)
-                    numComments.setText((post.comments.size))
-                }
+                showProgressBar(false)
+                numComments.text = post.comments.size.toString()
             }
         }
 

@@ -1,7 +1,9 @@
 package com.swarn.androidcomponents.fragment
 
 
+import android.content.Intent
 import android.os.Bundle
+import android.speech.RecognizerIntent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,7 +18,6 @@ import androidx.work.workDataOf
 import com.swarn.androidcomponents.R
 import com.swarn.androidcomponents.background.EXTRA_OUTPUT_MESSAGE
 import com.swarn.androidcomponents.background.MyWorkManager
-import java.util.concurrent.TimeUnit
 
 
 /**
@@ -24,8 +25,10 @@ import java.util.concurrent.TimeUnit
  *
  */
 const val TASK_KEY = "TASK_KEY"
+const val REQUEST_SPEECH_RECOGNIZER = 500
 
 class WorkManagerFragment : Fragment() {
+
 
     private lateinit var startWorkManagerBtn: Button
 
@@ -56,14 +59,16 @@ class WorkManagerFragment : Fragment() {
         val workRequest = OneTimeWorkRequestBuilder<MyWorkManager>()
             .setInputData(data)
             .setConstraints(constraints)
-            .setInitialDelay(5, TimeUnit.SECONDS)
+            .addTag(WorkManagerFragment::class.java.canonicalName)
+            //.setInitialDelay(20, TimeUnit.SECONDS)
             .build()
 
         startWorkManagerBtn.setOnClickListener {
-            WorkManager.getInstance().enqueue(workRequest)
+            //startSpeechRecognizer()
+            WorkManager.getInstance(activity!!.applicationContext).enqueue(workRequest)
         }
 
-        WorkManager.getInstance().getWorkInfoByIdLiveData(workRequest.id)
+        WorkManager.getInstance(activity!!.applicationContext).getWorkInfoByIdLiveData(workRequest.id)
             .observe(this, Observer {
                 workManagerStatusTxtView.append(it.state.name + "\n")
 
@@ -71,6 +76,15 @@ class WorkManagerFragment : Fragment() {
                     workManagerStatusTxtView.append(it.outputData.getString(EXTRA_OUTPUT_MESSAGE))
                 }
             })
+    }
+
+    private fun startSpeechRecognizer() {
+        val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
+        intent.putExtra(
+            RecognizerIntent.EXTRA_LANGUAGE_MODEL,
+            RecognizerIntent.LANGUAGE_MODEL_WEB_SEARCH
+        )
+        activity!!.startActivityForResult(intent, REQUEST_SPEECH_RECOGNIZER)
     }
 
 }

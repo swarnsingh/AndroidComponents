@@ -55,7 +55,7 @@ class MyForegroundService : Service() {
         //do heavy work on a background thread
         //stopSelf();
 
-        return Service.START_NOT_STICKY
+        return START_NOT_STICKY
     }
 
     override fun onBind(intent: Intent?): IBinder? {

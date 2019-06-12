@@ -14,19 +14,6 @@ import androidx.fragment.app.Fragment
 import com.swarn.androidcomponents.R
 import com.swarn.androidcomponents.service.MyForegroundService
 
-
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Activities that contain this fragment must implement the
- * [ForegroundServiceFragment.OnFragmentInteractionListener] interface
- * to handle interaction events.
- *
- */
 class ForegroundServiceFragment : androidx.fragment.app.Fragment() {
 
     private var listener: OnFragmentInteractionListener? = null

@@ -9,15 +9,13 @@ import android.widget.Toast
 import androidx.core.app.JobIntentService
 
 
-class MyJobIntentService : JobIntentService() {
+object MyJobIntentService : JobIntentService() {
 
     private val TAG = MyJobIntentService::class.java.canonicalName
 
 
-    companion object {
-        fun enqueueWork(context: Context, work: Intent) {
-            enqueueWork(context, MyJobIntentService::class.java, 123, work)
-        }
+    fun enqueueWork(context: Context, work: Intent) {
+        enqueueWork(context, MyJobIntentService::class.java, 123, work)
     }
 
     override fun onCreate() {

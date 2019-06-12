@@ -15,6 +15,9 @@ import com.swarn.androidcomponents.fragment.TASK_KEY
  * @author Swarn Singh.
  */
 const val EXTRA_OUTPUT_MESSAGE: String = "EXTRA_OUTPUT_MESSAGE"
+const val CHANNEL_ID = "MyChannelId"
+const val CHANNEL_NAME = "MyChannel"
+const val NOTIFICATION_ID = 1
 
 class MyWorkManager(appContext: Context, workerParams: WorkerParameters) : Worker(appContext, workerParams) {
 
@@ -36,17 +39,18 @@ class MyWorkManager(appContext: Context, workerParams: WorkerParameters) : Worke
 
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
             val channel = NotificationChannel(
-                "mychannel", "mychannel",
-                NotificationManager.IMPORTANCE_DEFAULT
+                CHANNEL_ID, CHANNEL_NAME,
+                NotificationManager.IMPORTANCE_HIGH
             )
             notificationManager.createNotificationChannel(channel)
         }
 
-        val notification = NotificationCompat.Builder(applicationContext, "simplifiedcoding")
+        val notification = NotificationCompat.Builder(applicationContext, CHANNEL_ID)
             .setContentTitle(title)
             .setContentText(task)
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setSmallIcon(R.mipmap.sym_def_app_icon)
 
-        notificationManager.notify(1, notification.build())
+        notificationManager.notify(NOTIFICATION_ID, notification.build())
     }
 }
