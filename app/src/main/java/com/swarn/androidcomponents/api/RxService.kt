@@ -2,7 +2,7 @@ package com.swarn.androidcomponents.api
 
 import com.swarn.androidcomponents.data.Comment
 import com.swarn.androidcomponents.data.Post
-import io.reactivex.Observable
+import io.reactivex.Flowable
 import retrofit2.http.GET
 import retrofit2.http.Path
 
@@ -12,8 +12,8 @@ import retrofit2.http.Path
  */
 interface RxService {
     @GET("posts")
-    fun getPosts(): Observable<List<Post>>
+    fun getPosts(): Flowable<List<Post>>
 
     @GET("posts/{id}/comments")
-    fun getComments(@Path("id") id: Int): Observable<List<Comment>>
+    fun getComments(@Path("id") id: Int): Flowable<List<Comment>>
 }

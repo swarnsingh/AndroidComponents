@@ -43,10 +43,7 @@ import com.swarn.androidcomponents.api.GoogleApiService
 import com.swarn.androidcomponents.data.GoogleDirectionsApiResponse
 import com.swarn.androidcomponents.data.Places
 import com.swarn.androidcomponents.util.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -211,9 +208,14 @@ class GooglePlacesFragment : Fragment(), OnMapReadyCallback, PlaceAutoCompleteAd
 
         placesClient.findAutocompletePredictions(request)
             .addOnSuccessListener {
-                addresses = MapUtil.getPredictionPlaces(it)
-                adapter.setData(addresses)
-                adapter.notifyDataSetChanged()
+                CoroutineScope(Dispatchers.Default).launch {
+                    addresses = MapUtil.getPredictionPlaces(it)
+
+                    withContext(Dispatchers.Main) {
+                        adapter.setData(addresses)
+                        adapter.notifyDataSetChanged()
+                    }
+                }
             }
             .addOnFailureListener {
                 Log.d(GooglePlacesFragment::class.java.canonicalName, it.localizedMessage)
@@ -381,12 +383,17 @@ class GooglePlacesFragment : Fragment(), OnMapReadyCallback, PlaceAutoCompleteAd
                         response: Response<GoogleDirectionsApiResponse>
                     ) {
                         if (response.isSuccessful) {
-                            val routes = MapUtil.parseDirections(response.body()!!)
-
                             if (::polyline.isInitialized) {
                                 polyline.remove()
                             }
-                            polyline = googleMap?.addPolyline(MapUtil.getPolyLines(routes))!!
+
+                            CoroutineScope(Dispatchers.Default).launch {
+                                val routes = MapUtil.parseDirections(response.body()!!)
+                                val polyLineOptions = MapUtil.getPolyLines(routes)
+                                withContext(Dispatchers.Main) {
+                                    polyline = googleMap?.addPolyline(polyLineOptions)!!
+                                }
+                            }
 
                             Log.d(TAG, response.body().toString())
                         } else {
