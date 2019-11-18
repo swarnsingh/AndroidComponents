@@ -35,6 +35,11 @@ class ServiceFragment : androidx.fragment.app.Fragment(), View.OnClickListener {
 
     private val TAG = ServiceFragment::class.java.canonicalName
 
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        Log.d(TAG, "onAttach")
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Log.d(TAG, "onCreate")
@@ -70,6 +75,41 @@ class ServiceFragment : androidx.fragment.app.Fragment(), View.OnClickListener {
 
 
         Log.d(TAG, "onActivityCreated")
+    }
+
+    override fun onStart() {
+        super.onStart()
+        Log.d(TAG, "onStart")
+    }
+
+    override fun onResume() {
+        super.onResume()
+        Log.d(TAG, "onResume")
+    }
+
+    override fun onPause() {
+        super.onPause()
+        Log.d(TAG, "onPause")
+    }
+
+    override fun onStop() {
+        super.onStop()
+        Log.d(TAG, "onStop")
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        Log.d(TAG, "onDestroyView")
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.d(TAG, "onDestroy")
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        Log.d(TAG, "onDetach")
     }
 
     override fun onClick(v: View?) {
@@ -125,40 +165,5 @@ class ServiceFragment : androidx.fragment.app.Fragment(), View.OnClickListener {
             import_txt_view.text = "on Service Not Bound"
             Toast.makeText(activity!!, "Service is not bounded", Toast.LENGTH_SHORT).show()
         }
-    }
-
-    override fun onStart() {
-        super.onStart()
-        Log.d(TAG, "onStart")
-    }
-
-    override fun onResume() {
-        super.onResume()
-        Log.d(TAG, "onResume")
-    }
-
-    override fun onPause() {
-        super.onPause()
-        Log.d(TAG, "onPause")
-    }
-
-    override fun onStop() {
-        super.onStop()
-        Log.d(TAG, "onStop")
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        Log.d(TAG, "onDestroyView")
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        Log.d(TAG, "onDestroy")
-    }
-
-    override fun onDetach() {
-        super.onDetach()
-        Log.d(TAG, "onDetach")
     }
 }

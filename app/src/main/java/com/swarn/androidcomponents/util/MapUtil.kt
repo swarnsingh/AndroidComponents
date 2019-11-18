@@ -65,7 +65,7 @@ object MapUtil {
     fun getPredictionPlaces(it: FindAutocompletePredictionsResponse): ArrayList<Places> {
         val addresses = ArrayList<Places>()
         for (prediction in it.autocompletePredictions) {
-            val place = Places(prediction.placeId, prediction.b(), prediction.c())
+            val place = Places(prediction.placeId, prediction.getPrimaryText(null).toString(), prediction.getSecondaryText(null).toString())
             addresses.add(place)
             Log.d(MapUtil::class.java.canonicalName, prediction.toString())
         }

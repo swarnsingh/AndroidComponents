@@ -1,70 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-      xmlns:tools="http://schemas.android.com/tools"
-      tools:showIn="navigation_view">
+        xmlns:tools="http://schemas.android.com/tools"
+        tools:showIn="navigation_view">
 
     <group android:checkableBehavior="single">
         <item
                 android:id="@+id/nav_camera"
                 android:icon="@drawable/ic_menu_camera"
-                android:title="Service"/>
+                android:title="Service" />
         <item
                 android:id="@+id/nav_gallery"
                 android:icon="@drawable/ic_menu_gallery"
-                android:title="Intent Service"/>
+                android:title="Intent Service" />
         <item
                 android:id="@+id/nav_slideshow"
                 android:icon="@drawable/ic_menu_slideshow"
-                android:title="Foreground Service"/>
+                android:title="Foreground Service" />
         <item
                 android:id="@+id/nav_manage"
                 android:icon="@drawable/ic_menu_manage"
-                android:title="Job Inent Service"/>
+                android:title="Job Inent Service" />
 
         <item
                 android:id="@+id/nav_job_scheduler"
                 android:icon="@android:drawable/ic_lock_idle_charging"
-                android:title="Job Scheduler"/>
+                android:title="Job Scheduler" />
 
         <item
                 android:id="@+id/nav_work_manager"
-                android:title="Work Manager"
-                android:icon="@android:drawable/ic_menu_manage"/>
+                android:icon="@android:drawable/ic_menu_manage"
+                android:title="Work Manager" />
 
         <item
                 android:id="@+id/nav_okhttp"
-                android:title="OkHttp"
-                android:icon="@android:drawable/ic_menu_gallery"/>
+                android:icon="@android:drawable/ic_menu_gallery"
+                android:title="OkHttp" />
 
         <item
                 android:id="@+id/nav_retrofit"
-                android:title="Retrofit"
-                android:icon="@android:drawable/ic_menu_recent_history"/>
+                android:icon="@android:drawable/ic_menu_recent_history"
+                android:title="Retrofit" />
 
         <item
                 android:id="@+id/nav_rx_java"
-                android:title="RxJava2"
-                android:icon="@android:drawable/ic_menu_rotate"/>
+                android:icon="@android:drawable/ic_menu_rotate"
+                android:title="RxJava2" />
 
         <item
                 android:id="@+id/nav_google_map"
-                android:title="Google Map"
-                android:icon="@android:drawable/ic_dialog_map"/>
+                android:icon="@android:drawable/ic_dialog_map"
+                android:title="Google Map" />
 
         <item
                 android:id="@+id/nav_google_geofence_map"
-                android:title="Google Map Geofences"
-                android:icon="@android:drawable/ic_menu_mapmode"/>
+                android:icon="@android:drawable/ic_menu_mapmode"
+                android:title="Google Map Geofences" />
 
         <item
                 android:id="@+id/nav_activity_recognition"
-                android:title="Activity Recognition"
-                android:icon="@android:drawable/ic_menu_compass"/>
+                android:icon="@android:drawable/ic_menu_compass"
+                android:title="Activity Recognition" />
 
         <item
                 android:id="@+id/nav_google_places"
-                android:title="Google Places"
-                android:icon="@android:drawable/ic_menu_compass"/>
+                android:icon="@android:drawable/ic_menu_compass"
+                android:title="Google Places" />
     </group>
 
     <item android:title="Communicate">
@@ -72,11 +72,16 @@
             <item
                     android:id="@+id/nav_share"
                     android:icon="@drawable/ic_menu_share"
-                    android:title="Messenger Service"/>
+                    android:title="Messenger Service" />
             <item
                     android:id="@+id/nav_send"
                     android:icon="@drawable/ic_menu_send"
-                    android:title="Broadcast Receiver"/>
+                    android:title="Broadcast Receiver" />
+
+            <item
+                    android:id="@+id/nav_content_provider"
+                    android:icon="@android:drawable/sym_contact_card"
+                    android:title="Content Provider" />
         </menu>
     </item>
 </menu>

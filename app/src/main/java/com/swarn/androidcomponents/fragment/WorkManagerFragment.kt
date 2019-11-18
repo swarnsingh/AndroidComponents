@@ -76,6 +76,7 @@ class WorkManagerFragment : Fragment() {
                     workManagerStatusTxtView.append(it.outputData.getString(EXTRA_OUTPUT_MESSAGE))
                 }
             })
+        System.currentTimeMillis()
     }
 
     private fun startSpeechRecognizer() {

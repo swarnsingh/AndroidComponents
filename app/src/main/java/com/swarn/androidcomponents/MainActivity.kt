@@ -2,7 +2,6 @@ package com.swarn.androidcomponents
 
 import android.app.Activity
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.speech.RecognizerIntent
 import android.util.Log
@@ -12,6 +11,7 @@ import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
+import androidx.fragment.app.Fragment
 import com.google.android.libraries.places.api.Places
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
@@ -47,7 +47,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
 
         val toggle = ActionBarDrawerToggle(
-            this, drawer_layout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close
+            this,
+            drawer_layout,
+            toolbar,
+            R.string.navigation_drawer_open,
+            R.string.navigation_drawer_close
         )
         drawer_layout.addDrawerListener(toggle)
         toggle.syncState()
@@ -140,11 +144,15 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
     }
 
-    private fun navigateFragment(fragment: androidx.fragment.app.Fragment, addToBackStack: Boolean) {
+    private fun navigateFragment(fragment: Fragment, addToBackStack: Boolean) {
         val fragmentManager = supportFragmentManager
         val fragmentTransaction = fragmentManager.beginTransaction()
 
-        fragmentTransaction.replace(R.id.frame_container, fragment, fragment::class.java.canonicalName)
+        fragmentTransaction.replace(
+            R.id.frame_container,
+            fragment,
+            fragment::class.java.canonicalName
+        )
 
         if (addToBackStack) {
             fragmentTransaction.addToBackStack(fragment::class.java.canonicalName)
@@ -155,59 +163,49 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         // Handle navigation view item clicks here.
         when (item.itemId) {
-            R.id.nav_camera -> {
-                navigateFragment(ServiceFragment(), false)
-            }
-            R.id.nav_gallery -> {
-                navigateFragment(IntentServiceFragment(), true)
-            }
-            R.id.nav_slideshow -> {
-                navigateFragment(ForegroundServiceFragment(), true)
-            }
-            R.id.nav_manage -> {
-                navigateFragment(JobIntentServiceFragment(), true)
-            }
-            R.id.nav_job_scheduler -> {
-                navigateFragment(JobSchedulerFragment(), true)
-            }
-            R.id.nav_work_manager -> {
-                navigateFragment(WorkManagerFragment(), true)
-            }
-            R.id.nav_okhttp -> {
-                navigateFragment(OkHttpFragment(), true)
-            }
-            R.id.nav_retrofit -> {
-                navigateFragment(RetrofitFragment(), true)
-            }
-            R.id.nav_rx_java -> {
-                navigateFragment(RxFragment(), true)
-            }
-            R.id.nav_google_map -> {
-                navigateFragment(GoogleMapFragment(), true)
-            }
-            R.id.nav_google_geofence_map -> {
-                navigateFragment(GeofencesFragment(), true)
-            }
-            R.id.nav_activity_recognition -> {
-                navigateFragment(ActivityRecognitionFragment(), true)
-            }
-            R.id.nav_google_places -> {
-                navigateFragment(GooglePlacesFragment(), true)
-            }
+            R.id.nav_camera -> navigateFragment(ServiceFragment(), false)
 
-            R.id.nav_share -> {
-                navigateFragment(MessengerServiceFragment(), true)
-            }
-            R.id.nav_send -> {
-                navigateFragment(BroadcastReceiverFragment(), true)
-            }
+            R.id.nav_gallery -> navigateFragment(IntentServiceFragment(), true)
+
+            R.id.nav_slideshow -> navigateFragment(ForegroundServiceFragment(), true)
+
+            R.id.nav_manage -> navigateFragment(JobIntentServiceFragment(), true)
+
+            R.id.nav_job_scheduler -> navigateFragment(JobSchedulerFragment(), true)
+
+            R.id.nav_work_manager -> navigateFragment(WorkManagerFragment(), true)
+
+            R.id.nav_okhttp -> navigateFragment(OkHttpFragment(), true)
+
+            R.id.nav_retrofit -> navigateFragment(RetrofitFragment(), true)
+
+            R.id.nav_rx_java -> navigateFragment(RxFragment(), true)
+
+            R.id.nav_google_map -> navigateFragment(GoogleMapFragment(), true)
+
+            R.id.nav_google_geofence_map -> navigateFragment(GeofencesFragment(), true)
+
+            R.id.nav_activity_recognition -> navigateFragment(ActivityRecognitionFragment(), true)
+
+            R.id.nav_google_places -> navigateFragment(GooglePlacesFragment(), true)
+
+            R.id.nav_share -> navigateFragment(MessengerServiceFragment(), true)
+
+            R.id.nav_send -> navigateFragment(BroadcastReceiverFragment(), true)
+
+            R.id.nav_content_provider -> navigateFragment(ContentProviderFragment(), true)
+
         }
 
         drawer_layout.closeDrawer(GravityCompat.START)
         return true
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }
 

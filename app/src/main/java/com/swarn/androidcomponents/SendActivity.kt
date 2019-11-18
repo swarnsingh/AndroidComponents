@@ -4,14 +4,22 @@ import android.os.Bundle
 import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log
+import android.widget.Button
+import android.widget.TextView
 
 import kotlinx.android.synthetic.main.activity_send.*
 
 class SendActivity : AppCompatActivity() {
 
+    private lateinit var countTxtView: TextView
+
+    private lateinit var startBtn: Button
+    private lateinit var stopBtn: Button
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Log.d(SendActivity::class.java.canonicalName, "onCreate")
+
         setContentView(R.layout.activity_send)
         setSupportActionBar(toolbar)
 
