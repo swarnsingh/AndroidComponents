@@ -5,7 +5,10 @@
 /.idea/libraries
 /.idea/modules.xml
 /.idea/workspace.xml
+/.idea/codeStyles/Project.xml
+/.idea/gradle.xml
 .DS_Store
 /build
 /captures
 .externalNativeBuild
+/app/src/main/res/values/google_maps_key.xml
