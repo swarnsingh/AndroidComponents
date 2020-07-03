@@ -1,4 +1,4 @@
-package com.swarn.androidcomponents.fragment
+package com.swarn.androidcomponents.fragment.service
 
 import android.content.Context
 import android.content.Intent
@@ -10,7 +10,6 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.Fragment
 import com.swarn.androidcomponents.R
 import com.swarn.androidcomponents.service.MyForegroundService
 

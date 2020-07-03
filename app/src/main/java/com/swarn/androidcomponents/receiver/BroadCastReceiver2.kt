@@ -8,7 +8,7 @@ import android.util.Log
 
 class BroadCastReceiver2 : BroadcastReceiver() {
 
-    private val TAG = BroadCastReceiver2::class.java!!.getSimpleName()
+    private val TAG = BroadCastReceiver2::class.java.simpleName
 
     private val BREAD_CRUMB = "Breadcrumb"
 

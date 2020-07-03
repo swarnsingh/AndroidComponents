@@ -1,4 +1,4 @@
-package com.swarn.androidcomponents.fragment
+package com.swarn.androidcomponents.fragment.service
 
 
 import android.content.Intent
@@ -45,9 +45,9 @@ class WorkManagerFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        startWorkManagerBtn = activity!!.findViewById(R.id.start_work_manager_btn)
+        startWorkManagerBtn = requireActivity().findViewById(R.id.start_work_manager_btn)
 
-        workManagerStatusTxtView = activity!!.findViewById(R.id.work_status_txt_view)
+        workManagerStatusTxtView = requireActivity().findViewById(R.id.work_status_txt_view)
 
         val data = workDataOf(TASK_KEY to "I am sending the data")
 
@@ -59,17 +59,17 @@ class WorkManagerFragment : Fragment() {
         val workRequest = OneTimeWorkRequestBuilder<MyWorkManager>()
             .setInputData(data)
             .setConstraints(constraints)
-            .addTag(WorkManagerFragment::class.java.canonicalName)
+            .addTag(WorkManagerFragment::class.java.canonicalName.toString())
             //.setInitialDelay(20, TimeUnit.SECONDS)
             .build()
 
         startWorkManagerBtn.setOnClickListener {
             //startSpeechRecognizer()
-            WorkManager.getInstance(activity!!.applicationContext).enqueue(workRequest)
+            WorkManager.getInstance(requireActivity().applicationContext).enqueue(workRequest)
         }
 
-        WorkManager.getInstance(activity!!.applicationContext).getWorkInfoByIdLiveData(workRequest.id)
-            .observe(this, Observer {
+        WorkManager.getInstance(requireActivity().applicationContext).getWorkInfoByIdLiveData(workRequest.id)
+            .observe(viewLifecycleOwner, Observer {
                 workManagerStatusTxtView.append(it.state.name + "\n")
 
                 if (it != null && it.state.isFinished) {
@@ -85,7 +85,9 @@ class WorkManagerFragment : Fragment() {
             RecognizerIntent.EXTRA_LANGUAGE_MODEL,
             RecognizerIntent.LANGUAGE_MODEL_WEB_SEARCH
         )
-        activity!!.startActivityForResult(intent, REQUEST_SPEECH_RECOGNIZER)
+        requireActivity().startActivityForResult(intent,
+            REQUEST_SPEECH_RECOGNIZER
+        )
     }
 
 }

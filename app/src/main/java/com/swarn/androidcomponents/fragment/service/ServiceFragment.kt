@@ -1,10 +1,9 @@
-package com.swarn.androidcomponents.fragment
+package com.swarn.androidcomponents.fragment.service
 
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
-import android.net.Uri
 import android.os.Bundle
 import android.os.IBinder
 import android.util.Log
@@ -13,7 +12,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.Toast
-import androidx.fragment.app.Fragment
 import com.swarn.androidcomponents.R
 import com.swarn.androidcomponents.service.MyService
 import kotlinx.android.synthetic.main.fragment_import.*

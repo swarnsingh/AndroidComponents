@@ -3,12 +3,12 @@
              xmlns:tools="http://schemas.android.com/tools"
              android:layout_width="match_parent"
              android:layout_height="match_parent"
-             tools:context=".fragment.GooglePlacesFragment">
+             tools:context=".fragment.location.GooglePlacesFragment">
 
     <fragment
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            tools:context=".fragment.GoogleMapFragment"
+            tools:context=".fragment.location.GoogleMapFragment"
             android:id="@+id/google_places_map"
             class="com.google.android.gms.maps.SupportMapFragment">
     </fragment>

@@ -57,7 +57,7 @@
                 android:enabled="true"></receiver>
 
         <activity
-                android:name=".SendActivity"
+                android:name=".NavigationActivity"
                 android:label="@string/title_activity_send"
                 android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity

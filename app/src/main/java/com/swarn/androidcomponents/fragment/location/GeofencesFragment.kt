@@ -1,4 +1,4 @@
-package com.swarn.androidcomponents.fragment
+package com.swarn.androidcomponents.fragment.location
 
 
 import android.os.Bundle

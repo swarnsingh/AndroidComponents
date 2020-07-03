@@ -1,4 +1,4 @@
-package com.swarn.androidcomponents.fragment
+package com.swarn.androidcomponents.fragment.location
 
 
 import android.annotation.SuppressLint
@@ -148,8 +148,10 @@ class GooglePlacesFragment : Fragment(), OnMapReadyCallback, PlaceAutoCompleteAd
 
         locationRequest = LocationRequest.create().apply {
             priority = LocationRequest.PRIORITY_HIGH_ACCURACY
-            interval = UPDATE_INTERVAL
-            fastestInterval = FASTEST_INTERVAL //  to set an upper limit to the update rate
+            interval =
+                UPDATE_INTERVAL
+            fastestInterval =
+                FASTEST_INTERVAL //  to set an upper limit to the update rate
         }
 
         locationCallback = initLocationCallback()
@@ -247,7 +249,9 @@ class GooglePlacesFragment : Fragment(), OnMapReadyCallback, PlaceAutoCompleteAd
                     getDeviceLocation()
                 }
             }
-        }, GPS_REQUEST_GOOGLE_PLACES_FRAGMENT)
+        },
+            GPS_REQUEST_GOOGLE_PLACES_FRAGMENT
+        )
     }
 
     private fun getLocation(query: String): Address? {
@@ -357,7 +361,7 @@ class GooglePlacesFragment : Fragment(), OnMapReadyCallback, PlaceAutoCompleteAd
         adapter.notifyDataSetChanged()
 
         addressAutoCompleteEditTxt.text = null
-        Util.hideKeyboardFrom(activity!!, activity!!.currentFocus)
+        requireActivity().currentFocus?.let { Util.hideKeyboardFrom(requireActivity(), it) }
 
         GlobalScope.launch(Dispatchers.Main) {
             val address =

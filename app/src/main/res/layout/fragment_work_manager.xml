@@ -5,7 +5,7 @@
               android:layout_height="match_parent"
               android:orientation="vertical"
               android:gravity="center"
-              tools:context=".fragment.WorkManagerFragment">
+              tools:context=".fragment.service.WorkManagerFragment">
 
     <TextView
             android:id="@+id/work_status_txt_view"

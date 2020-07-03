@@ -1,15 +1,15 @@
 package com.swarn.androidcomponents
 
 import android.os.Bundle
-import com.google.android.material.snackbar.Snackbar
-import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log
 import android.widget.Button
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.snackbar.Snackbar
+import kotlinx.android.synthetic.main.activity_navigation.fab
+import kotlinx.android.synthetic.main.app_bar_main.*
 
-import kotlinx.android.synthetic.main.activity_send.*
-
-class SendActivity : AppCompatActivity() {
+class NavigationActivity : AppCompatActivity() {
 
     private lateinit var countTxtView: TextView
 
@@ -18,9 +18,9 @@ class SendActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.d(SendActivity::class.java.canonicalName, "onCreate")
+        Log.d(NavigationActivity::class.java.canonicalName, "onCreate")
 
-        setContentView(R.layout.activity_send)
+        setContentView(R.layout.activity_navigation)
         setSupportActionBar(toolbar)
 
         fab.setOnClickListener { view ->
@@ -31,32 +31,32 @@ class SendActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-        Log.d(SendActivity::class.java.canonicalName, "onStart")
+        Log.d(NavigationActivity::class.java.canonicalName, "onStart")
     }
 
     override fun onResume() {
         super.onResume()
-        Log.d(SendActivity::class.java.canonicalName, "onResume")
+        Log.d(NavigationActivity::class.java.canonicalName, "onResume")
     }
 
     override fun onPause() {
         super.onPause()
-        Log.d(SendActivity::class.java.canonicalName, "onPause")
+        Log.d(NavigationActivity::class.java.canonicalName, "onPause")
     }
 
     override fun onRestart() {
         super.onRestart()
-        Log.d(SendActivity::class.java.canonicalName, "onReStart")
+        Log.d(NavigationActivity::class.java.canonicalName, "onReStart")
     }
 
     override fun onStop() {
         super.onStop()
-        Log.d(SendActivity::class.java.canonicalName, "onStop")
+        Log.d(NavigationActivity::class.java.canonicalName, "onStop")
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        Log.d(SendActivity::class.java.canonicalName, "onDestroy")
+        Log.d(NavigationActivity::class.java.canonicalName, "onDestroy")
     }
 
     /**
@@ -66,17 +66,20 @@ class SendActivity : AppCompatActivity() {
      * The savedInstanceState Bundle is same as the one used in onCreate().
      */
     override fun onRestoreInstanceState(savedInstanceState: Bundle?) {
-        Log.d(SendActivity::class.java.canonicalName, "onRestoreInstanceState "+savedInstanceState?.getString("KEY"))
+        Log.d(
+            NavigationActivity::class.java.canonicalName,
+            "onRestoreInstanceState " + savedInstanceState?.getString("KEY")
+        )
     }
 
     // invoked when the activity may be temporarily destroyed, save the instance state here
-    /*override fun onSaveInstanceState(outState: Bundle?) {
-        outState?.putString("KEY", "123")
+    override fun onSaveInstanceState(outState: Bundle) {
+        outState.putString("KEY", "123")
 
         // call superclass to save any view hierarchy
-        super.onSaveInstanceState(outState)
+        outState.let { super.onSaveInstanceState(it) }
 
-        Log.d(SendActivity::class.java.canonicalName, "onSaveInstanceState")
-    }*/
+        Log.d(NavigationActivity::class.java.canonicalName, "onSaveInstanceState")
+    }
 
 }

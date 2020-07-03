@@ -1,4 +1,4 @@
-package com.swarn.androidcomponents.fragment
+package com.swarn.androidcomponents.fragment.service
 
 import android.app.job.JobInfo
 import android.app.job.JobScheduler
@@ -40,7 +40,7 @@ class JobSchedulerFragment : Fragment() {
         stopJobSchedulerBtn = activity!!.findViewById(R.id.stop_job_btn)
 
         scheduleJobSchedulerBtn.setOnClickListener {
-            var componentName = ComponentName(activity, JobSchedulerService::class.java)
+            var componentName = ComponentName(requireActivity(), JobSchedulerService::class.java)
             var jobInfo = JobInfo.Builder(JOB_ID, componentName)
                 .setRequiresCharging(true)
                 .setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)

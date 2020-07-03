@@ -6,7 +6,7 @@
               android:orientation="vertical"
               android:padding="16dp"
               android:gravity="center"
-              tools:context=".fragment.MessengerServiceFragment">
+              tools:context=".fragment.service.MessengerServiceFragment">
 
     <TextView
             android:id="@+id/random_no_txt_view"

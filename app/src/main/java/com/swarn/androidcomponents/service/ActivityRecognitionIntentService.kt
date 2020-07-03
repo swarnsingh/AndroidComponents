@@ -4,9 +4,8 @@ import android.app.IntentService
 import android.content.Intent
 import android.os.Bundle
 import android.os.IBinder
-import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.google.android.gms.location.ActivityRecognitionResult
-import com.swarn.androidcomponents.fragment.TRANSITION_RECEIVER
+import com.swarn.androidcomponents.fragment.location.TRANSITION_RECEIVER
 
 
 class ActivityRecognitionIntentService : IntentService("ActivityRecognitionIntentService") {

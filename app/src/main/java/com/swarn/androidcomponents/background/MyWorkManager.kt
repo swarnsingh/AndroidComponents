@@ -8,7 +8,7 @@ import androidx.core.app.NotificationCompat
 import androidx.work.Data
 import androidx.work.Worker
 import androidx.work.WorkerParameters
-import com.swarn.androidcomponents.fragment.TASK_KEY
+import com.swarn.androidcomponents.fragment.service.TASK_KEY
 
 
 /**

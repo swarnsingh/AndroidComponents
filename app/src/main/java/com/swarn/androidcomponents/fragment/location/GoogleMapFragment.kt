@@ -1,4 +1,4 @@
-package com.swarn.androidcomponents.fragment
+package com.swarn.androidcomponents.fragment.location
 
 
 import android.annotation.SuppressLint
@@ -73,7 +73,7 @@ class GoogleMapFragment : Fragment(), OnMapReadyCallback {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(activity!!)
+        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
 
         locationRequest = LocationRequest.create().apply {
             priority = LocationRequest.PRIORITY_HIGH_ACCURACY
@@ -126,7 +126,7 @@ class GoogleMapFragment : Fragment(), OnMapReadyCallback {
     }
 
     private fun getGPSLocation() {
-        GpsUtil(activity!!).turnGPSOn(object : GpsUtil.OnGpsListener {
+        GpsUtil(requireActivity()).turnGPSOn(object : GpsUtil.OnGpsListener {
             override fun gpsStatus(isGPSEnable: Boolean) {
                 // turn on GPS
                 isGPS = isGPSEnable
@@ -135,7 +135,9 @@ class GoogleMapFragment : Fragment(), OnMapReadyCallback {
                     getDeviceLocation()
                 }
             }
-        }, GPS_REQUEST_GOOGLE_MAP_FRAGMENT)
+        },
+            GPS_REQUEST_GOOGLE_MAP_FRAGMENT
+        )
     }
 
     private fun getAddress(location: Location): Address? {
@@ -145,7 +147,7 @@ class GoogleMapFragment : Fragment(), OnMapReadyCallback {
         )
 
         try {
-            if (ConnectivityManager.isConnected(activity!!.applicationContext)) {
+            if (ConnectivityManager.isConnected(requireActivity().applicationContext)) {
                 val geocoder = Geocoder(activity?.applicationContext, Locale.getDefault())
                 val addresses = geocoder.getFromLocation(location.latitude, location.longitude, 1)
                 return addresses!![0]
@@ -242,10 +244,10 @@ class GoogleMapFragment : Fragment(), OnMapReadyCallback {
          */
 
         if (ContextCompat.checkSelfPermission(
-                activity!!, android.Manifest.permission.ACCESS_FINE_LOCATION
+                requireActivity(), android.Manifest.permission.ACCESS_FINE_LOCATION
             ) == PackageManager.PERMISSION_GRANTED &&
             (ContextCompat.checkSelfPermission(
-                activity!!, android.Manifest.permission.ACCESS_COARSE_LOCATION
+                requireActivity(), android.Manifest.permission.ACCESS_COARSE_LOCATION
             ) == PackageManager.PERMISSION_GRANTED)
         ) {
             mLocationPermissionGranted = true
@@ -253,7 +255,7 @@ class GoogleMapFragment : Fragment(), OnMapReadyCallback {
             getGPSLocation()
         } else {
             if (shouldShowRequestPermissionRationale(android.Manifest.permission.ACCESS_FINE_LOCATION)) {
-                Toast.makeText(activity!!, "Please give the permission for Access the location!", Toast.LENGTH_LONG)
+                Toast.makeText(requireActivity(), "Please give the permission for Access the location!", Toast.LENGTH_LONG)
                     .show()
                 requestPermissions(
                     arrayOf(
@@ -262,9 +264,9 @@ class GoogleMapFragment : Fragment(), OnMapReadyCallback {
                     ),
                     PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION
                 )
-                PermissionUtils.setNeverAskAgainStatus(activity!!)
+                PermissionUtils.setNeverAskAgainStatus(requireActivity())
             } else {
-                if (PermissionUtils.isNeverAskAgainSelected(activity!!)) {
+                if (PermissionUtils.isNeverAskAgainSelected(requireActivity())) {
                     // It means Never Ask again checkbox is selected. So we need to open settings dialog
                     openApplicationDetailSettingDialog()
                 } else {
@@ -294,7 +296,7 @@ class GoogleMapFragment : Fragment(), OnMapReadyCallback {
                 dialog.dismiss()
                 val intent = Intent()
                 intent.action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
-                val uri = fromParts("package", activity!!.packageName, null)
+                val uri = fromParts("package", requireActivity().packageName, null)
                 intent.data = uri
                 context?.startActivity(intent)
             }

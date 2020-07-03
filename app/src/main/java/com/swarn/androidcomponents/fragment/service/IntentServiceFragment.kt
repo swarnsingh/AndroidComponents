@@ -1,4 +1,4 @@
-package com.swarn.androidcomponents.fragment
+package com.swarn.androidcomponents.fragment.service
 
 import android.content.ComponentName
 import android.content.Context

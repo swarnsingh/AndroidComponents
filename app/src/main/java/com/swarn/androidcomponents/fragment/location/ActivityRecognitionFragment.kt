@@ -1,4 +1,4 @@
-package com.swarn.androidcomponents.fragment
+package com.swarn.androidcomponents.fragment.location
 
 
 import android.content.BroadcastReceiver
@@ -48,10 +48,10 @@ class ActivityRecognitionFragment : Fragment() {
 
         initActivityRecognitionData()
 
-        mStartTrackBtn = activity!!.findViewById(R.id.track_activity_btn)
-        mStopTrackBtn = activity!!.findViewById(R.id.stop_tracking_btn)
+        mStartTrackBtn = requireActivity().findViewById(R.id.track_activity_btn)
+        mStopTrackBtn = requireActivity().findViewById(R.id.stop_tracking_btn)
 
-        mRecyclerView = activity!!.findViewById(R.id.activities_recycler_view)
+        mRecyclerView = requireActivity().findViewById(R.id.activities_recycler_view)
         mRecyclerView.layoutManager = LinearLayoutManager(context)
 
         mActivityRecognitionAdapter = ActivityRecognitionAdapter()
@@ -82,7 +82,7 @@ class ActivityRecognitionFragment : Fragment() {
 
         if (isTrackingStarted) {
             val intentFilter = IntentFilter(TRANSITION_RECEIVER)
-            activity!!.registerReceiver(transitionReceiver, intentFilter)
+            requireActivity().registerReceiver(transitionReceiver, intentFilter)
             initTransitionRecognition()
         }
     }
@@ -99,7 +99,7 @@ class ActivityRecognitionFragment : Fragment() {
         override fun onReceive(context: Context?, intent: Intent?) {
             if (intent?.extras != null) {
                 val result =
-                    intent.extras.get(TRANSITION_RECEIVER) as ActivityRecognitionResult
+                    intent.extras!!.get(TRANSITION_RECEIVER) as ActivityRecognitionResult
                 Log.d("Transition Receiver", "if $result")
                 processTransitionResult(result)
             }
@@ -122,14 +122,14 @@ class ActivityRecognitionFragment : Fragment() {
     private fun initTransitionRecognition() {
         if (isTrackingStarted) {
             val intentFilter = IntentFilter(TRANSITION_RECEIVER)
-            activity!!.registerReceiver(transitionReceiver, intentFilter)
+            requireActivity().registerReceiver(transitionReceiver, intentFilter)
         }
-        TransitionRecognition.startTracking(activity!!.applicationContext)
+        TransitionRecognition.startTracking(requireActivity().applicationContext)
     }
 
     private fun stopTransitionRecognition() {
-        activity!!.unregisterReceiver(transitionReceiver)
-        TransitionRecognition.stopTracking(activity!!.applicationContext)
+        requireActivity().unregisterReceiver(transitionReceiver)
+        TransitionRecognition.stopTracking(requireActivity().applicationContext)
     }
 
     fun processTransitionResult(result: ActivityRecognitionResult) {

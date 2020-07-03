@@ -1,4 +1,4 @@
-package com.swarn.androidcomponents.fragment
+package com.swarn.androidcomponents.fragment.service
 
 
 import android.annotation.SuppressLint
@@ -50,11 +50,11 @@ class MessengerServiceFragment : Fragment(), View.OnClickListener {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        bindServiceBtn = activity!!.findViewById(R.id.bind_service_btn)
-        unBindServiceBtn = activity!!.findViewById(R.id.unbind_service_btn)
-        getRandomNoBtn = activity!!.findViewById(R.id.get_random_no_btn)
+        bindServiceBtn = requireActivity().findViewById(R.id.bind_service_btn)
+        unBindServiceBtn = requireActivity().findViewById(R.id.unbind_service_btn)
+        getRandomNoBtn = requireActivity().findViewById(R.id.get_random_no_btn)
 
-        randomNoTxtView = activity!!.findViewById(com.swarn.androidcomponents.R.id.random_no_txt_view)
+        randomNoTxtView = requireActivity().findViewById(com.swarn.androidcomponents.R.id.random_no_txt_view)
 
         bindServiceBtn.setOnClickListener(this)
         unBindServiceBtn.setOnClickListener(this)
@@ -111,13 +111,16 @@ class MessengerServiceFragment : Fragment(), View.OnClickListener {
     }
 
     private fun bindToRemoteService() {
-        activity!!.bindService(serviceIntent, randomNumberServiceConnection, BIND_AUTO_CREATE)
+        randomNumberServiceConnection?.let {
+            requireActivity().bindService(serviceIntent,
+                it, BIND_AUTO_CREATE)
+        }
         Toast.makeText(activity, "Service bound", Toast.LENGTH_SHORT).show()
     }
 
     private fun unbindFromRemoteService() {
         if (mIsBound) {
-            activity?.unbindService(randomNumberServiceConnection)
+            randomNumberServiceConnection?.let { activity?.unbindService(it) }
             mIsBound = false
             Toast.makeText(activity, "Service Unbound", Toast.LENGTH_SHORT).show()
         }
