@@ -58,7 +58,7 @@ class OkHttpFragment : Fragment() {
                 response.use {
 
                     if (response.isSuccessful) {
-                        val value = response.body()?.string()
+                        val value = response.body?.string()
                         val gson = GsonBuilder().create()
 
                         val okHttpData = gson.fromJson<OkHttpData>(value, OkHttpData::class.java)

@@ -6,6 +6,9 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.snackbar.Snackbar
+import com.swarn.androidcomponents.di.dagger.ApplicationGraph
+import com.swarn.androidcomponents.di.dagger.DaggerApplicationGraph
+import com.swarn.androidcomponents.di.dagger.UserRepository
 import kotlinx.android.synthetic.main.activity_navigation.fab
 import kotlinx.android.synthetic.main.app_bar_main.*
 
@@ -27,6 +30,12 @@ class NavigationActivity : AppCompatActivity() {
             Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show()
         }
+
+        // Create an instance of the application graph
+        val applicationGraph: ApplicationGraph = DaggerApplicationGraph.create()
+
+        // Grab an instance of UserRepository from the application graph
+        val userRepository: UserRepository = applicationGraph.repository()
     }
 
     override fun onStart() {

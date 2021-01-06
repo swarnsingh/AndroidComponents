@@ -1,9 +1,7 @@
 package com.swarn.androidcomponents.fragment.service
 
 
-import android.content.Intent
 import android.os.Bundle
-import android.speech.RecognizerIntent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -55,20 +53,18 @@ class WorkManagerFragment : Fragment() {
             .setRequiresCharging(true)
             .build()
 
-
         val workRequest = OneTimeWorkRequestBuilder<MyWorkManager>()
             .setInputData(data)
             .setConstraints(constraints)
             .addTag(WorkManagerFragment::class.java.canonicalName.toString())
-            //.setInitialDelay(20, TimeUnit.SECONDS)
             .build()
 
         startWorkManagerBtn.setOnClickListener {
-            //startSpeechRecognizer()
             WorkManager.getInstance(requireActivity().applicationContext).enqueue(workRequest)
         }
 
-        WorkManager.getInstance(requireActivity().applicationContext).getWorkInfoByIdLiveData(workRequest.id)
+        WorkManager.getInstance(requireActivity().applicationContext)
+            .getWorkInfoByIdLiveData(workRequest.id)
             .observe(viewLifecycleOwner, Observer {
                 workManagerStatusTxtView.append(it.state.name + "\n")
 
@@ -76,18 +72,5 @@ class WorkManagerFragment : Fragment() {
                     workManagerStatusTxtView.append(it.outputData.getString(EXTRA_OUTPUT_MESSAGE))
                 }
             })
-        System.currentTimeMillis()
     }
-
-    private fun startSpeechRecognizer() {
-        val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
-        intent.putExtra(
-            RecognizerIntent.EXTRA_LANGUAGE_MODEL,
-            RecognizerIntent.LANGUAGE_MODEL_WEB_SEARCH
-        )
-        requireActivity().startActivityForResult(intent,
-            REQUEST_SPEECH_RECOGNIZER
-        )
-    }
-
 }
