@@ -18,6 +18,7 @@ import androidx.loader.content.CursorLoader
 import androidx.loader.content.Loader
 import androidx.recyclerview.widget.RecyclerView
 import com.swarn.androidcomponents.R
+import timber.log.Timber
 
 
 const val MY_PERMISSIONS_REQUEST_READ_CONTACTS = 20
@@ -105,13 +106,13 @@ class ContentProviderFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor
 
         if (cursor != null && cursor.count > 0) {
             while (cursor.moveToNext()) {
-                Log.d(
+                Timber.d(
                     TAG,
                     cursor.getString(0) + " , " + cursor.getString(1) + " , " + cursor.getString(2) + "\n"
                 )
             }
         } else {
-            Log.d(TAG, "No Contacts")
+            Timber.d(TAG, "No Contacts")
         }
 
         cursor?.close()

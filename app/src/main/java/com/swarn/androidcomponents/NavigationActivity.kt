@@ -5,12 +5,14 @@ import android.util.Log
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import com.bumptech.glide.Glide
 import com.google.android.material.snackbar.Snackbar
 import com.swarn.androidcomponents.di.dagger.ApplicationGraph
 import com.swarn.androidcomponents.di.dagger.DaggerApplicationGraph
 import com.swarn.androidcomponents.di.dagger.UserRepository
 import kotlinx.android.synthetic.main.activity_navigation.fab
 import kotlinx.android.synthetic.main.app_bar_main.*
+import timber.log.Timber
 
 class NavigationActivity : AppCompatActivity() {
 
@@ -21,7 +23,7 @@ class NavigationActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.d(NavigationActivity::class.java.canonicalName, "onCreate")
+        Timber.d(NavigationActivity::class.java.canonicalName, "onCreate")
 
         setContentView(R.layout.activity_navigation)
         setSupportActionBar(toolbar)
@@ -40,42 +42,43 @@ class NavigationActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-        Log.d(NavigationActivity::class.java.canonicalName, "onStart")
+        Timber.d(NavigationActivity::class.java.canonicalName, "onStart")
     }
 
     override fun onResume() {
         super.onResume()
-        Log.d(NavigationActivity::class.java.canonicalName, "onResume")
+        Timber.d(NavigationActivity::class.java.canonicalName, "onResume")
     }
 
     override fun onPause() {
         super.onPause()
-        Log.d(NavigationActivity::class.java.canonicalName, "onPause")
+        Timber.d(NavigationActivity::class.java.canonicalName, "onPause")
     }
 
     override fun onRestart() {
         super.onRestart()
-        Log.d(NavigationActivity::class.java.canonicalName, "onReStart")
+        Timber.d(NavigationActivity::class.java.canonicalName, "onReStart")
     }
 
     override fun onStop() {
         super.onStop()
-        Log.d(NavigationActivity::class.java.canonicalName, "onStop")
+        Timber.d(NavigationActivity::class.java.canonicalName, "onStop")
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        Log.d(NavigationActivity::class.java.canonicalName, "onDestroy")
+        Timber.d(NavigationActivity::class.java.canonicalName, "onDestroy")
+        if (fab.context != null) {
+            Timber.d(NavigationActivity::class.java.canonicalName, "context is not null")
+        } else {
+            Timber.d(NavigationActivity::class.java.canonicalName, "context is null")
+        }
+        val isDestroyed = (fab.context as NavigationActivity).isDestroyed
+        Timber.d(NavigationActivity::class.java.canonicalName, "Is Destroyed : $isDestroyed")
     }
 
-    /**
-     * This callback is called only when there is a saved instance that is previously saved by using
-     * onSaveInstanceState(). We restore some state in onCreate(), while we can optionally restore
-     * other state here, possibly usable after onStart() has completed.
-     * The savedInstanceState Bundle is same as the one used in onCreate().
-     */
-    override fun onRestoreInstanceState(savedInstanceState: Bundle?) {
-        Log.d(
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        Timber.d(
             NavigationActivity::class.java.canonicalName,
             "onRestoreInstanceState " + savedInstanceState?.getString("KEY")
         )
@@ -88,7 +91,7 @@ class NavigationActivity : AppCompatActivity() {
         // call superclass to save any view hierarchy
         outState.let { super.onSaveInstanceState(it) }
 
-        Log.d(NavigationActivity::class.java.canonicalName, "onSaveInstanceState")
+        Timber.d(NavigationActivity::class.java.canonicalName, "onSaveInstanceState")
     }
 
 }

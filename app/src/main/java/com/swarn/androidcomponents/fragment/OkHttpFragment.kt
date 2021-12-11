@@ -12,6 +12,7 @@ import com.google.gson.GsonBuilder
 import com.swarn.androidcomponents.R
 import com.swarn.androidcomponents.data.OkHttpData
 import okhttp3.*
+import timber.log.Timber
 import java.io.IOException
 
 /**
@@ -51,7 +52,7 @@ class OkHttpFragment : Fragment() {
         okHttpClient.newCall(request).enqueue(object : Callback {
 
             override fun onFailure(call: Call, e: IOException) {
-                Log.d(OkHttpFragment::class.java.canonicalName, e.localizedMessage)
+                Timber.d(OkHttpFragment::class.java.canonicalName, e.localizedMessage)
             }
 
             override fun onResponse(call: Call, response: Response) {
@@ -62,7 +63,7 @@ class OkHttpFragment : Fragment() {
                         val gson = GsonBuilder().create()
 
                         val okHttpData = gson.fromJson<OkHttpData>(value, OkHttpData::class.java)
-                        Log.d(OkHttpFragment::class.java.canonicalName, okHttpData.toString())
+                        Timber.d(OkHttpFragment::class.java.canonicalName, okHttpData.toString())
                     }
 
                     activity?.runOnUiThread {

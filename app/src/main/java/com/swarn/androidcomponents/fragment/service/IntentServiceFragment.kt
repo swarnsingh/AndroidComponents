@@ -16,6 +16,7 @@ import androidx.fragment.app.Fragment
 import com.swarn.androidcomponents.R
 import com.swarn.androidcomponents.service.MyIntentService
 import kotlinx.android.synthetic.main.fragment_gallery.*
+import timber.log.Timber
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -55,7 +56,7 @@ class IntentServiceFragment : androidx.fragment.app.Fragment(), View.OnClickList
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.d(IntentServiceFragment::class.java.canonicalName, "onCreate")
+        Timber.d(IntentServiceFragment::class.java.canonicalName, "onCreate")
         arguments?.let {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
@@ -67,7 +68,7 @@ class IntentServiceFragment : androidx.fragment.app.Fragment(), View.OnClickList
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        Log.d(IntentServiceFragment::class.java.canonicalName, "onCreateView")
+        Timber.d(IntentServiceFragment::class.java.canonicalName, "onCreateView")
         return inflater.inflate(R.layout.fragment_gallery, container, false)
     }
 
@@ -78,7 +79,7 @@ class IntentServiceFragment : androidx.fragment.app.Fragment(), View.OnClickList
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        Log.d(IntentServiceFragment::class.java.canonicalName, "onAttach")
+        Timber.d(IntentServiceFragment::class.java.canonicalName, "onAttach")
         if (context is OnFragmentInteractionListener) {
             listener = context
         } else {
@@ -110,17 +111,17 @@ class IntentServiceFragment : androidx.fragment.app.Fragment(), View.OnClickList
 
         intentServiceIntent = Intent(activity, MyIntentService::class.java)
 
-        Log.d(IntentServiceFragment::class.java.canonicalName, "onActivityCreated")
+        Timber.d(IntentServiceFragment::class.java.canonicalName, "onActivityCreated")
     }
 
     override fun onClick(v: View?) {
         when (v) {
             startServiceBtn -> {
-                Log.d(TAG, "on Gallery Fragment : Thread Id : " + Thread.currentThread().id)
+                Timber.d(TAG, "on Gallery Fragment : Thread Id : " + Thread.currentThread().id)
                 activity?.startService(intentServiceIntent)
             }
             stopServiceBtn -> {
-                Log.d(TAG, "on Gallery Fragment : Thread Id : " + Thread.currentThread().id)
+                Timber.d(TAG, "on Gallery Fragment : Thread Id : " + Thread.currentThread().id)
                 activity?.stopService(intentServiceIntent)
             }
             bindServiceBtn -> {
@@ -177,37 +178,37 @@ class IntentServiceFragment : androidx.fragment.app.Fragment(), View.OnClickList
 
     override fun onStart() {
         super.onStart()
-        Log.d(IntentServiceFragment::class.java.canonicalName, "onStart")
+        Timber.d(IntentServiceFragment::class.java.canonicalName, "onStart")
     }
 
     override fun onResume() {
         super.onResume()
-        Log.d(IntentServiceFragment::class.java.canonicalName, "onResume")
+        Timber.d(IntentServiceFragment::class.java.canonicalName, "onResume")
     }
 
     override fun onPause() {
         super.onPause()
-        Log.d(IntentServiceFragment::class.java.canonicalName, "onPause")
+        Timber.d(IntentServiceFragment::class.java.canonicalName, "onPause")
     }
 
     override fun onStop() {
         super.onStop()
-        Log.d(IntentServiceFragment::class.java.canonicalName, "onStop")
+        Timber.d(IntentServiceFragment::class.java.canonicalName, "onStop")
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        Log.d(IntentServiceFragment::class.java.canonicalName, "onDestroyView")
+        Timber.d(IntentServiceFragment::class.java.canonicalName, "onDestroyView")
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        Log.d(IntentServiceFragment::class.java.canonicalName, "onDestroy")
+        Timber.d(IntentServiceFragment::class.java.canonicalName, "onDestroy")
     }
 
     override fun onDetach() {
         super.onDetach()
-        Log.d(IntentServiceFragment::class.java.canonicalName, "onDetach")
+        Timber.d(IntentServiceFragment::class.java.canonicalName, "onDetach")
         listener = null
     }
 

@@ -20,6 +20,7 @@ import com.swarn.androidcomponents.adapter.ActivityRecognitionAdapter
 import com.swarn.androidcomponents.transition.DetectedActivity
 import com.swarn.androidcomponents.transition.Track
 import com.swarn.androidcomponents.transition.TransitionRecognition
+import timber.log.Timber
 
 
 const val TRANSITION_RECEIVER = "com.swarn.androidcomponents.fragment.transitionReceiver"
@@ -100,7 +101,7 @@ class ActivityRecognitionFragment : Fragment() {
             if (intent?.extras != null) {
                 val result =
                     intent.extras!!.get(TRANSITION_RECEIVER) as ActivityRecognitionResult
-                Log.d("Transition Receiver", "if $result")
+                Timber.d("Transition Receiver", "if $result")
                 processTransitionResult(result)
             }
         }

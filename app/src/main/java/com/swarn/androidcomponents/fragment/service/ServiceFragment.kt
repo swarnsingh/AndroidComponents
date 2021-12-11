@@ -15,6 +15,7 @@ import android.widget.Toast
 import com.swarn.androidcomponents.R
 import com.swarn.androidcomponents.service.MyService
 import kotlinx.android.synthetic.main.fragment_import.*
+import timber.log.Timber
 
 
 class ServiceFragment : androidx.fragment.app.Fragment(), View.OnClickListener {
@@ -35,12 +36,12 @@ class ServiceFragment : androidx.fragment.app.Fragment(), View.OnClickListener {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        Log.d(TAG, "onAttach")
+        Timber.d(TAG, "onAttach")
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.d(TAG, "onCreate")
+        Timber.d(TAG, "onCreate")
     }
 
     override fun onCreateView(
@@ -48,7 +49,7 @@ class ServiceFragment : androidx.fragment.app.Fragment(), View.OnClickListener {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        Log.d(TAG, "onCreateView")
+        Timber.d(TAG, "onCreateView")
         return inflater.inflate(R.layout.fragment_import, container, false)
     }
 
@@ -72,52 +73,52 @@ class ServiceFragment : androidx.fragment.app.Fragment(), View.OnClickListener {
         getRandomBtn.setOnClickListener(this)
 
 
-        Log.d(TAG, "onActivityCreated")
+        Timber.d(TAG, "onActivityCreated")
     }
 
     override fun onStart() {
         super.onStart()
-        Log.d(TAG, "onStart")
+        Timber.d(TAG, "onStart")
     }
 
     override fun onResume() {
         super.onResume()
-        Log.d(TAG, "onResume")
+        Timber.d(TAG, "onResume")
     }
 
     override fun onPause() {
         super.onPause()
-        Log.d(TAG, "onPause")
+        Timber.d(TAG, "onPause")
     }
 
     override fun onStop() {
         super.onStop()
-        Log.d(TAG, "onStop")
+        Timber.d(TAG, "onStop")
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        Log.d(TAG, "onDestroyView")
+        Timber.d(TAG, "onDestroyView")
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        Log.d(TAG, "onDestroy")
+        Timber.d(TAG, "onDestroy")
     }
 
     override fun onDetach() {
         super.onDetach()
-        Log.d(TAG, "onDetach")
+        Timber.d(TAG, "onDetach")
     }
 
     override fun onClick(v: View?) {
         when (v) {
             startServiceBtn -> {
-                Log.d(TAG, "on Import Fragment : Thread Id : " + Thread.currentThread().id)
+                Timber.d(TAG, "on Import Fragment : Thread Id : " + Thread.currentThread().id)
                 activity?.startService(serviceIntent)
             }
             stopServiceBtn -> {
-                Log.d(TAG, "on Import Fragment : Thread Id : " + Thread.currentThread().id)
+                Timber.d(TAG, "on Import Fragment : Thread Id : " + Thread.currentThread().id)
                 activity?.stopService(serviceIntent)
             }
             bindServiceBtn -> {

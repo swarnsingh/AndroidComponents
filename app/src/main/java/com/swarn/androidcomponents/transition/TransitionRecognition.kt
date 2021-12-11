@@ -6,6 +6,7 @@ import android.content.Intent
 import android.util.Log
 import com.google.android.gms.location.ActivityRecognition
 import com.swarn.androidcomponents.service.ActivityRecognitionIntentService
+import timber.log.Timber
 
 /**
  * @author Swarn Singh.
@@ -25,14 +26,14 @@ object TransitionRecognition : TransitionRecognitionAbstract() {
         if (pendingIntent != null) {
             ActivityRecognition.getClient(context).removeActivityUpdates(pendingIntent)
                 .addOnSuccessListener {
-                    Log.d(
+                    Timber.d(
                         TAG,
                         "De registered for activity transition updates"
                     )
                     pendingIntent.cancel()
                 }
                 .addOnFailureListener { e ->
-                    Log.e(
+                    Timber.e(
                         TAG,
                         "Transitions could not be unregistered: $e"
                     )
@@ -47,11 +48,11 @@ object TransitionRecognition : TransitionRecognitionAbstract() {
         ActivityRecognition.getClient(context).apply {
             requestActivityUpdates(3000L, pendingIntent)
                 .addOnSuccessListener {
-                    Log.d(TAG, "requestActivityUpdates addOnSuccessListener")
+                    Timber.d(TAG, "requestActivityUpdates addOnSuccessListener")
                 }
 
                 .addOnFailureListener {
-                    Log.d(TAG, "requestActivityUpdates addOnFailureListener : ${it.localizedMessage}")
+                    Timber.d(TAG, "requestActivityUpdates addOnFailureListener : ${it.localizedMessage}")
                 }
         }
     }

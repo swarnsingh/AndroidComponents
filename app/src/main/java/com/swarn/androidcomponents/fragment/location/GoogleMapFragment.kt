@@ -19,6 +19,7 @@ import android.widget.Toast
 import androidx.annotation.NonNull
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import com.apptentive.android.sdk.Apptentive
 import com.google.android.gms.location.*
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -35,6 +36,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import timber.log.Timber
 import java.util.*
 
 
@@ -86,6 +88,8 @@ class GoogleMapFragment : Fragment(), OnMapReadyCallback {
         val mapFragment =
             childFragmentManager.findFragmentById(R.id.google_map) as SupportMapFragment
         mapFragment.getMapAsync(this)
+
+        Apptentive.engage(context, "GoogleMapFragment_event")
     }
 
     override fun onResume() {
@@ -104,7 +108,7 @@ class GoogleMapFragment : Fragment(), OnMapReadyCallback {
         }
     }
 
-    override fun onMapReady(map: GoogleMap?) {
+    override fun onMapReady(map: GoogleMap) {
         googleMap = map
 
         updateLocationUI()
@@ -117,7 +121,7 @@ class GoogleMapFragment : Fragment(), OnMapReadyCallback {
 
                 val mCurrentLocation = locationResult!!.lastLocation
 
-                Log.d("onLocationResult", mCurrentLocation.toString())
+                Timber.d("onLocationResult", mCurrentLocation.toString())
 
                 addMarker(mCurrentLocation)
             }
@@ -141,7 +145,7 @@ class GoogleMapFragment : Fragment(), OnMapReadyCallback {
     }
 
     private fun getAddress(location: Location): Address? {
-        Log.d(
+        Timber.d(
             TAG,
             "Current Thread in getAddress : ${Thread.currentThread().id}"
         )
@@ -153,13 +157,13 @@ class GoogleMapFragment : Fragment(), OnMapReadyCallback {
                 return addresses!![0]
             }
         } catch (e: Exception) {
-            Log.d(TAG, e.toString())
+            Timber.d(TAG, e.toString())
         }
         return null
     }
 
     private fun setMarker(currentLocation: Location, address: Address) {
-        Log.d(
+        Timber.d(
             TAG,
             "Current Thread in setMarker : ${Thread.currentThread().id}"
         )
@@ -206,7 +210,7 @@ class GoogleMapFragment : Fragment(), OnMapReadyCallback {
                 getLocationPermission()
             }
         } catch (e: SecurityException) {
-            Log.e("Exception: %s", e.message)
+            e.message?.let { Timber.e("Exception: %s", it) }
         }
     }
 
@@ -225,14 +229,14 @@ class GoogleMapFragment : Fragment(), OnMapReadyCallback {
                         }
                     }
                     .addOnFailureListener {
-                        Log.d(TAG, "Current location is null. Using defaults.")
-                        Log.e(TAG, "Exception: %s", it)
+                        Timber.d(TAG, "Current location is null. Using defaults.")
+                        Timber.e(TAG, "Exception: %s", it)
                         //googleMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(mDefaultLocation, DEFAULT_ZOOM))
                         googleMap?.uiSettings?.isMyLocationButtonEnabled = false
                     }
             }
         } catch (e: SecurityException) {
-            Log.e("Exception: %s", e.message)
+            e.message?.let { Log.e("Exception: %s", it) }
         }
     }
 

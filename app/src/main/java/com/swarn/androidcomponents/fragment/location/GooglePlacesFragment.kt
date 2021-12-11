@@ -47,6 +47,7 @@ import kotlinx.coroutines.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import timber.log.Timber
 import java.util.*
 
 
@@ -58,7 +59,8 @@ const val UPDATE_INTERVAL = 60 * 1000L
 const val FASTEST_INTERVAL = 50 * 1000L
 
 @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
-class GooglePlacesFragment : Fragment(), OnMapReadyCallback, PlaceAutoCompleteAdapter.ItemClickListener {
+class GooglePlacesFragment : Fragment(), OnMapReadyCallback,
+    PlaceAutoCompleteAdapter.ItemClickListener {
 
     private var token = AutocompleteSessionToken.newInstance()
 
@@ -164,7 +166,8 @@ class GooglePlacesFragment : Fragment(), OnMapReadyCallback, PlaceAutoCompleteAd
 
         mAddressRecyclerView.layoutManager = LinearLayoutManager(activity!!.applicationContext)
 
-        placesClient = com.google.android.libraries.places.api.Places.createClient(activity!!.applicationContext)
+        placesClient =
+            com.google.android.libraries.places.api.Places.createClient(activity!!.applicationContext)
 
         requestBuilder = FindAutocompletePredictionsRequest.builder()
             .setCountry("IN")
@@ -180,7 +183,10 @@ class GooglePlacesFragment : Fragment(), OnMapReadyCallback, PlaceAutoCompleteAd
 
 
         geoApiContext = GeoApiContext.Builder()
-            .enterpriseCredentials(getString(R.string.google_client_id), getString(R.string.google_client_secret_key))
+            .enterpriseCredentials(
+                getString(R.string.google_client_id),
+                getString(R.string.google_client_secret_key)
+            )
             .build()
 
         googleApiService = GoogleApiClient.createService(GoogleApiService::class.java)
@@ -196,12 +202,6 @@ class GooglePlacesFragment : Fragment(), OnMapReadyCallback, PlaceAutoCompleteAd
         super.onPause()
 
         mFusedLocationClient.removeLocationUpdates(locationCallback)
-    }
-
-    override fun onMapReady(map: GoogleMap?) {
-        googleMap = map
-
-        updateLocationUI()
     }
 
     fun getLocations(query: String) {
@@ -220,7 +220,7 @@ class GooglePlacesFragment : Fragment(), OnMapReadyCallback, PlaceAutoCompleteAd
                 }
             }
             .addOnFailureListener {
-                Log.d(GooglePlacesFragment::class.java.canonicalName, it.localizedMessage)
+                Timber.d(GooglePlacesFragment::class.java.canonicalName, it.localizedMessage)
             }
     }
 
@@ -231,7 +231,7 @@ class GooglePlacesFragment : Fragment(), OnMapReadyCallback, PlaceAutoCompleteAd
 
                 val mCurrentLocation = locationResult!!.lastLocation
 
-                Log.d("onLocationResult", mCurrentLocation.toString())
+                Timber.d("onLocationResult", mCurrentLocation.toString())
 
                 addMarker(mCurrentLocation)
             }
@@ -240,22 +240,23 @@ class GooglePlacesFragment : Fragment(), OnMapReadyCallback, PlaceAutoCompleteAd
     }
 
     private fun getGPSLocation() {
-        GpsUtil(activity!!).turnGPSOn(object : GpsUtil.OnGpsListener {
-            override fun gpsStatus(isGPSEnable: Boolean) {
-                // turn on GPS
-                isGPS = isGPSEnable
+        GpsUtil(activity!!).turnGPSOn(
+            object : GpsUtil.OnGpsListener {
+                override fun gpsStatus(isGPSEnable: Boolean) {
+                    // turn on GPS
+                    isGPS = isGPSEnable
 
-                if (isGPS) {
-                    getDeviceLocation()
+                    if (isGPS) {
+                        getDeviceLocation()
+                    }
                 }
-            }
-        },
+            },
             GPS_REQUEST_GOOGLE_PLACES_FRAGMENT
         )
     }
 
     private fun getLocation(query: String): Address? {
-        Log.d(
+        Timber.d(
             TAG,
             "Current Thread in getAddress : ${Thread.currentThread().id}"
         )
@@ -280,17 +281,21 @@ class GooglePlacesFragment : Fragment(), OnMapReadyCallback, PlaceAutoCompleteAd
                 return addresses[0]
             }
         } catch (e: Exception) {
-            Log.d(TAG, e.toString())
+            Timber.d(TAG, e.toString())
             val handler = activity!!.window.decorView.handler
             handler.post {
-                Toast.makeText(activity!!, "Unable to fetch the location. Please try again", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    activity!!,
+                    "Unable to fetch the location. Please try again",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
         return null
     }
 
     private fun getAddress(location: Location): Address? {
-        Log.d(
+        Timber.d(
             TAG,
             "Current Thread in getAddress : ${Thread.currentThread().id}"
         )
@@ -319,19 +324,20 @@ class GooglePlacesFragment : Fragment(), OnMapReadyCallback, PlaceAutoCompleteAd
                 return addresses!![0]
             }
         } catch (e: Exception) {
-            Log.d(TAG, e.toString())
+            Timber.d(TAG, e.toString())
         }
         return null
     }
 
     private fun setMarker(isCurrentLocationMarker: Boolean, address: Address, title: String) {
-        Log.d(
+        Timber.d(
             TAG,
             "Current Thread in setMarker : ${Thread.currentThread().id}"
         )
         val latLng = LatLng(address.latitude, address.longitude)
 
-        markerOptions = MarkerOptions().position(latLng).title(title).snippet(address.getAddressLine(0))
+        markerOptions =
+            MarkerOptions().position(latLng).title(title).snippet(address.getAddressLine(0))
 
         if (isCurrentLocationMarker) {
             if (::currentLocationMarker.isInitialized) {
@@ -375,11 +381,18 @@ class GooglePlacesFragment : Fragment(), OnMapReadyCallback, PlaceAutoCompleteAd
     private fun drawRoute() {
         if (::currentLocationMarker.isInitialized && ::selectedPlaceMarker.isInitialized) {
 
-            val origin = "" + currentLocationMarker.position.latitude + "," + currentLocationMarker.position.longitude
-            val destination = "" + selectedPlaceMarker.position.latitude + "," + selectedPlaceMarker.position.longitude
+            val origin =
+                "" + currentLocationMarker.position.latitude + "," + currentLocationMarker.position.longitude
+            val destination =
+                "" + selectedPlaceMarker.position.latitude + "," + selectedPlaceMarker.position.longitude
             val mode = "driving"  // default mode
 
-            googleApiService.getDirections(origin, destination, mode, getString(R.string.google_maps_key))
+            googleApiService.getDirections(
+                origin,
+                destination,
+                mode,
+                getString(R.string.google_maps_key)
+            )
                 .enqueue(object : Callback<GoogleDirectionsApiResponse> {
 
                     override fun onResponse(
@@ -399,7 +412,7 @@ class GooglePlacesFragment : Fragment(), OnMapReadyCallback, PlaceAutoCompleteAd
                                 }
                             }
 
-                            Log.d(TAG, response.body().toString())
+                            Timber.d(TAG, response.body().toString())
                         } else {
                             Toast.makeText(
                                 activity!!.applicationContext,
@@ -446,7 +459,7 @@ class GooglePlacesFragment : Fragment(), OnMapReadyCallback, PlaceAutoCompleteAd
                 getLocationPermission()
             }
         } catch (e: SecurityException) {
-            Log.e("Exception: %s", e.message)
+            e.message?.let { Log.e("Exception: %s", it) }
         }
     }
 
@@ -465,14 +478,14 @@ class GooglePlacesFragment : Fragment(), OnMapReadyCallback, PlaceAutoCompleteAd
                         }
                     }
                     .addOnFailureListener {
-                        Log.d(TAG, "Current location is null. Using defaults.")
-                        Log.e(TAG, "Exception: %s", it)
+                        Timber.d(TAG, "Current location is null. Using defaults.")
+                        Timber.e(TAG, "Exception: %s", it)
                         //googleMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(mDefaultLocation, DEFAULT_ZOOM))
                         googleMap?.uiSettings?.isMyLocationButtonEnabled = false
                     }
             }
         } catch (e: SecurityException) {
-            Log.e("Exception: %s", e.message)
+            e.message?.let { Timber.e("Exception: %s", it) }
         }
     }
 
@@ -495,7 +508,11 @@ class GooglePlacesFragment : Fragment(), OnMapReadyCallback, PlaceAutoCompleteAd
             getGPSLocation()
         } else {
             if (shouldShowRequestPermissionRationale(android.Manifest.permission.ACCESS_FINE_LOCATION)) {
-                Toast.makeText(activity!!, "Please give the permission for Access the location!", Toast.LENGTH_LONG)
+                Toast.makeText(
+                    activity!!,
+                    "Please give the permission for Access the location!",
+                    Toast.LENGTH_LONG
+                )
                     .show()
                 requestPermissions(
                     arrayOf(
@@ -508,7 +525,10 @@ class GooglePlacesFragment : Fragment(), OnMapReadyCallback, PlaceAutoCompleteAd
             } else {
                 if (PermissionUtils.isNeverAskAgainSelected(activity!!)) {
                     // It means Never Ask again checkbox is selected. So we need to open settings dialog
-                    Util.openApplicationDetailSettingDialog(activity!!, getString(R.string.gps_alert_dialog_msg))
+                    Util.openApplicationDetailSettingDialog(
+                        activity!!,
+                        getString(R.string.gps_alert_dialog_msg)
+                    )
                 } else {
                     requestPermissions(
                         arrayOf(
@@ -536,9 +556,18 @@ class GooglePlacesFragment : Fragment(), OnMapReadyCallback, PlaceAutoCompleteAd
                 if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     mLocationPermissionGranted = true
                     getGPSLocation()
-                    mFusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, null)
+                    mFusedLocationClient.requestLocationUpdates(
+                        locationRequest,
+                        locationCallback,
+                        null
+                    )
                 }
             }
         }
+    }
+
+    override fun onMapReady(map: GoogleMap) {
+        googleMap = map
+        updateLocationUI()
     }
 }

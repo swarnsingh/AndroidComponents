@@ -21,6 +21,7 @@ import com.swarn.androidcomponents.fragment.location.*
 import com.swarn.androidcomponents.fragment.service.*
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
+import timber.log.Timber
 
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener,
@@ -30,11 +31,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.d(TAG, "onCreate")
+        Timber.d(TAG, "onCreate")
 
         if (savedInstanceState != null) {
-            Log.d(TAG, "on savedInstanceState != null")
-            Log.d(TAG, "on " + savedInstanceState.getString("KEY"))
+            Timber.d(TAG, "on savedInstanceState != null")
+            Timber.d(TAG, "on " + savedInstanceState.getString("KEY"))
         }
 
         if (!Places.isInitialized()) {
@@ -71,42 +72,36 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     override fun onStart() {
         super.onStart()
-        Log.d(TAG, "onStart")
+        Timber.d(TAG, "onStart")
     }
 
     override fun onResume() {
         super.onResume()
-        Log.d(TAG, "onResume")
+        Timber.d(TAG, "onResume")
     }
 
     override fun onPause() {
         super.onPause()
-        Log.d(TAG, "onPause")
+        Timber.d(TAG, "onPause")
     }
 
     override fun onRestart() {
         super.onRestart()
-        Log.d(TAG, "onReStart")
+        Timber.d(TAG, "onReStart")
     }
 
     override fun onStop() {
         super.onStop()
-        Log.d(TAG, "onStop")
+        Timber.d(TAG, "onStop")
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        Log.d(TAG, "onDestroy")
+        Timber.d(TAG, "onDestroy")
     }
 
-    /**
-     * This callback is called only when there is a saved instance that is previously saved by using
-     * onSaveInstanceState(). We restore some state in onCreate(), while we can optionally restore
-     * other state here, possibly usable after onStart() has completed.
-     * The savedInstanceState Bundle is same as the one used in onCreate().
-     */
-    override fun onRestoreInstanceState(savedInstanceState: Bundle?) {
-        Log.d(TAG, ": onRestoreInstanceState " + savedInstanceState?.getString("KEY"))
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        Timber.d(TAG, ": onRestoreInstanceState " + savedInstanceState?.getString("KEY"))
     }
 
     // invoked when the activity may be temporarily destroyed, save the instance state here
@@ -115,7 +110,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         // call superclass to save any view hierarchy
 
-        Log.d(TAG, ": onSaveInstanceState")
+        Timber.d(TAG, ": onSaveInstanceState")
         super.onSaveInstanceState(outState)
     }
 
@@ -237,7 +232,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             } else if (requestCode == REQUEST_SPEECH_RECOGNIZER) {
                 val results = data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
                 if (results != null && results.size > 0) {
-                    Log.d(TAG, results[0].toString())
+                    Timber.d(TAG, results[0].toString())
                 }
             }
         }

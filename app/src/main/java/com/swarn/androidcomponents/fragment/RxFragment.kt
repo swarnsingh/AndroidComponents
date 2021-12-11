@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.apptentive.android.sdk.Apptentive
 import com.swarn.androidcomponents.R
 import com.swarn.androidcomponents.adapter.OkHttpAdapter
 import com.swarn.androidcomponents.api.RxAPIClient
@@ -18,6 +19,7 @@ import io.reactivex.Flowable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
+import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
 
@@ -42,11 +44,13 @@ class RxFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        recyclerView = activity!!.findViewById(R.id.recycler_view);
+        recyclerView = requireActivity().findViewById(R.id.recycler_view);
 
-        adapter = OkHttpAdapter(activity!!)
+        adapter = OkHttpAdapter(requireActivity())
         recyclerView?.layoutManager = LinearLayoutManager(activity)
         recyclerView?.adapter = adapter
+
+        Apptentive.engage(context, "rx_event")
 
         disposables.addAll(getPosts()
             .subscribeOn(Schedulers.io())
@@ -55,13 +59,13 @@ class RxFragment : Fragment() {
             }
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({
-                Log.d(
+                Timber.d(
                     "updatePost -> ${it.id} && ${it.comments.size} -> ",
                     Thread.currentThread().name
                 )
                 adapter!!.updatePost(it)
             }, {
-                Log.e(TAG, it.localizedMessage, it)
+                Timber.e(TAG, it.localizedMessage, it)
             })
         )
     }
@@ -84,10 +88,10 @@ class RxFragment : Fragment() {
         return rxService.getComments(post.id)
             .subscribeOn(Schedulers.io())
             .delay(5, TimeUnit.MILLISECONDS)
-            .doOnError { Log.d("Got Error on ${post.id} -> ", it.localizedMessage) }
+            .doOnError { Timber.d("Got Error on ${post.id} -> ", it.localizedMessage) }
             .onErrorReturn { listOf() }
             .map {
-                Log.d("getComments -> ${post.id} -> ", Thread.currentThread().name)
+                Timber.d("getComments -> ${post.id} -> ", Thread.currentThread().name)
                 post.comments = it
                 return@map post
             }

@@ -4,7 +4,7 @@ import android.app.IntentService
 import android.content.Intent
 import android.os.Binder
 import android.os.IBinder
-import android.util.Log
+import timber.log.Timber
 import java.util.*
 
 /**
@@ -27,7 +27,7 @@ class MyIntentService : IntentService("MyIntentService") {
     private val mBinder = MyServiceBinder()
 
     override fun onHandleIntent(intent: Intent?) {
-        Log.d(TAG, "on Import Fragment : Thread Id : " + Thread.currentThread().id)
+        Timber.d(TAG, "on Import Fragment : Thread Id : " + Thread.currentThread().id)
 
         //stopSelf()
         mIsRandomGeneratorOn = true
@@ -35,7 +35,7 @@ class MyIntentService : IntentService("MyIntentService") {
     }
 
     override fun onBind(intent: Intent?): IBinder? {
-        Log.d(TAG, "onBind")
+        Timber.d(TAG, "onBind")
         return mBinder
     }
 
@@ -51,10 +51,13 @@ class MyIntentService : IntentService("MyIntentService") {
                 Thread.sleep(1000)
                 if (mIsRandomGeneratorOn) {
                     mRandomNumber = Random().nextInt(MAX) + MIN
-                    Log.d(TAG, "on Thread id: " + Thread.currentThread().id + ", Random Number: " + mRandomNumber)
+                    Timber.d(
+                        TAG,
+                        "on Thread id: " + Thread.currentThread().id + ", Random Number: " + mRandomNumber
+                    )
                 }
             } catch (e: InterruptedException) {
-                Log.d(TAG, "Thread Interrupted")
+                Timber.d(TAG, "Thread Interrupted")
             }
         }
     }
@@ -70,7 +73,7 @@ class MyIntentService : IntentService("MyIntentService") {
     override fun onDestroy() {
         super.onDestroy()
         stopRandomNumberGenerator()
-        Log.d(TAG, "onServiceDestroy : Thread Id : " + Thread.currentThread().id)
+        Timber.d(TAG, "onServiceDestroy : Thread Id : " + Thread.currentThread().id)
     }
 
 }

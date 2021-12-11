@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.util.Log
+import timber.log.Timber
 
 
 class BroadCastReceiver1 : BroadcastReceiver() {
@@ -16,6 +17,6 @@ class BroadCastReceiver1 : BroadcastReceiver() {
         var trail = bundle.getString(BREAD_CRUMB)
         trail = if (trail == null) "Start->$TAG" else "$trail->$TAG"
         bundle.putString(BREAD_CRUMB, trail)
-        Log.i(TAG, "BroadCastReceiver1 triggered: $trail")
+        Timber.i(TAG, "BroadCastReceiver1 triggered: $trail")
     }
 }

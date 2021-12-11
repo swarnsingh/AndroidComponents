@@ -11,6 +11,7 @@ import android.widget.Button
 import android.widget.EditText
 import com.swarn.androidcomponents.R
 import com.swarn.androidcomponents.service.MyJobIntentService
+import timber.log.Timber
 
 
 class JobIntentServiceFragment : androidx.fragment.app.Fragment() {
@@ -39,7 +40,7 @@ class JobIntentServiceFragment : androidx.fragment.app.Fragment() {
             val serviceIntent = Intent(activity!!, MyJobIntentService::class.java)
             serviceIntent.putExtra("inputExtra", input)
 
-            Log.d(
+            Timber.d(
                 JobIntentServiceFragment::class.java.canonicalName,
                 "onNewJob - Current Thread Id : " + Thread.currentThread().id
             )

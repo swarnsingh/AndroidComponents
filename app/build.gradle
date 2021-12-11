@@ -7,11 +7,19 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 
 android {
-    compileSdkVersion 29
+    signingConfigs {
+        signed {
+            storeFile file('/Users/swaransa/Documents/SignedKey')
+            storePassword 'android'
+            keyAlias 'key0'
+            keyPassword 'android'
+        }
+    }
+    compileSdkVersion 31
     defaultConfig {
         applicationId "com.swarn.androidcomponents"
         minSdkVersion 23
-        targetSdkVersion 29
+        targetSdkVersion 31
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -20,76 +28,90 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            versionNameSuffix '1.0'
+            debuggable true
+            signingConfig signingConfigs.signed
         }
     }
     // For Kotlin projects
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "11"
     }
     compileOptions {
-        targetCompatibility = "8"
-        sourceCompatibility = "8"
+        targetCompatibility = "11"
+        sourceCompatibility = "11"
     }
 }
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
-    implementation 'androidx.appcompat:appcompat:1.2.0'
+    implementation 'androidx.appcompat:appcompat:1.4.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'com.google.android.material:material:1.3.0-beta01'
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
-    implementation 'androidx.core:core-ktx:1.3.2'
+    implementation 'com.google.android.material:material:1.4.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.2'
+    implementation 'androidx.core:core-ktx:1.7.0'
 
     implementation 'io.reactivex.rxjava2:rxkotlin:2.4.0'
     implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
 
-    //kochava
+    // Timber
+    implementation 'com.jakewharton.timber:timber:5.0.1'
+
+    // kochava
     implementation 'com.kochava.base:tracker:3.9.0'
 
-    def nav_version = "2.3.2"
+    // Apptentive
+    implementation 'com.apptentive:apptentive-android:5.7.1'
+
+    def nav_version = "2.3.5"
     implementation "androidx.navigation:navigation-fragment-ktx:$nav_version" // For Kotlin use navigation-fragment-ktx
     implementation "androidx.navigation:navigation-ui-ktx:$nav_version" // For Kotlin use navigation-ui-ktx
 
-    def material_version = "1.2.0-beta01"
-    implementation "com.google.android.material:material:$material_version"
-
     //Dagger2
-    implementation 'com.google.dagger:dagger:2.28.3'
+    implementation 'com.google.dagger:dagger:2.36'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     annotationProcessor 'com.google.dagger:dagger-compiler:2.25.4'
     kapt 'com.google.dagger:dagger-compiler:2.25.4'
 
-    implementation 'com.google.dagger:dagger-android:2.25.3'
+    implementation 'com.google.dagger:dagger-android:2.35.1'
     implementation 'com.google.dagger:dagger-android-support:2.23.2'
     annotationProcessor 'com.google.dagger:dagger-android-processor:2.25.3'
     kapt 'com.google.dagger:dagger-android-processor:2.25.3'
 
+    implementation 'com.github.bumptech.glide:glide:4.12.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.12.0'
+
+
+    // Koin
+    implementation "org.koin:koin-android-viewmodel:2.0.1"
+    implementation "org.koin:koin-android:2.2.2"
+
     // Kotlin + coroutines
-    implementation 'androidx.work:work-runtime-ktx:2.5.0-beta02'
+    implementation 'androidx.work:work-runtime-ktx:2.7.1'
 
     // OkHttp
-    implementation 'com.squareup.okhttp3:okhttp:4.9.0'
-    implementation 'com.squareup.okhttp3:logging-interceptor:4.9.0'
+    implementation 'com.squareup.okhttp3:okhttp:4.9.1'
+    implementation 'com.squareup.okhttp3:logging-interceptor:4.9.1'
 
     //GSON
-    implementation 'com.google.code.gson:gson:2.8.6'
+    implementation 'com.google.code.gson:gson:2.8.7'
 
     //Retrofit
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
 
-    implementation 'com.google.android.gms:play-services-maps:17.0.0'
-    implementation 'com.google.android.gms:play-services-location:17.1.0'
+    implementation 'com.google.android.gms:play-services-maps:18.0.0'
+    implementation 'com.google.android.gms:play-services-location:18.0.0'
 
     implementation 'com.google.maps:google-maps-services:0.9.3'
     implementation 'org.slf4j:slf4j-simple:1.7.25'
 
-    implementation 'com.google.android.libraries.places:places:2.4.0'
+    implementation 'com.google.android.libraries.places:places:2.5.0'
 
-    implementation 'com.google.android.gms:play-services-safetynet:17.0.0'
-    testImplementation 'junit:junit:4.13.1'
-    androidTestImplementation 'androidx.test:runner:1.3.0'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+    implementation 'com.google.android.gms:play-services-safetynet:17.0.1'
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test:runner:1.4.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
     implementation files('libs/adapter-rxjava2-2.5.0.jar')
 }

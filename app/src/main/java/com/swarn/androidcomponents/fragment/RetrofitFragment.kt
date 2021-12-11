@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
 import androidx.fragment.app.Fragment
+import com.apptentive.android.sdk.Apptentive
 import com.swarn.androidcomponents.R
 import com.swarn.androidcomponents.api.APIClient
 import com.swarn.androidcomponents.api.RetrofitService
@@ -14,6 +15,7 @@ import com.swarn.androidcomponents.data.OkHttpData
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import timber.log.Timber
 
 class RetrofitFragment : Fragment() {
 
@@ -31,12 +33,13 @@ class RetrofitFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        mProgressBar = activity!!.findViewById(R.id.progress_bar)
+        mProgressBar = requireActivity().findViewById(R.id.progress_bar)
 
         getRetrofitResponse()
     }
 
     private fun getRetrofitResponse() {
+        Apptentive.engage(context, "retrofit_event")
         retrofitService = APIClient.createService(RetrofitService::class.java)
 
         retrofitService.getRetrofitData().enqueue(object : Callback<OkHttpData> {
@@ -44,14 +47,14 @@ class RetrofitFragment : Fragment() {
                 activity?.runOnUiThread {
                     mProgressBar.visibility = View.GONE
                 }
-                Log.d(RetrofitFragment::class.java.canonicalName, t.localizedMessage)
+                Timber.d(RetrofitFragment::class.java.canonicalName, t.localizedMessage)
             }
 
             override fun onResponse(call: Call<OkHttpData>, response: Response<OkHttpData>) {
 
                 if (response.isSuccessful) {
                     val okHttpData = response.body()
-                    Log.d(RetrofitFragment::class.java.canonicalName, okHttpData.toString())
+                    Timber.d(RetrofitFragment::class.java.canonicalName, okHttpData.toString())
                 }
 
                 activity?.runOnUiThread {

@@ -13,6 +13,7 @@ import android.widget.Button
 import androidx.fragment.app.Fragment
 import com.swarn.androidcomponents.R
 import com.swarn.androidcomponents.service.JobSchedulerService
+import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
 /**
@@ -52,16 +53,16 @@ class JobSchedulerFragment : Fragment() {
             var resultCode = jobScheduler.schedule(jobInfo)
 
             if (resultCode == JobScheduler.RESULT_SUCCESS) {
-                Log.d(TAG, "Job Scheduled on Thread ID : ${Thread.currentThread().id}")
+                Timber.d(TAG, "Job Scheduled on Thread ID : ${Thread.currentThread().id}")
             } else {
-                Log.d(TAG, "Job Scheduling Failed ")
+                Timber.d(TAG, "Job Scheduling Failed ")
             }
         }
 
         stopJobSchedulerBtn.setOnClickListener {
             var scheduler = activity!!.getSystemService(JobScheduler::class.java)
             scheduler.cancel(JOB_ID)
-            Log.d(TAG, "Job Cancelled")
+            Timber.d(TAG, "Job Cancelled")
         }
     }
 }

@@ -7,6 +7,7 @@ import com.google.android.gms.maps.model.PolylineOptions
 import com.google.android.libraries.places.api.net.FindAutocompletePredictionsResponse
 import com.swarn.androidcomponents.data.GoogleDirectionsApiResponse
 import com.swarn.androidcomponents.data.Places
+import timber.log.Timber
 
 /**
  * @author Swarn Singh.
@@ -67,7 +68,7 @@ object MapUtil {
         for (prediction in it.autocompletePredictions) {
             val place = Places(prediction.placeId, prediction.getPrimaryText(null).toString(), prediction.getSecondaryText(null).toString())
             addresses.add(place)
-            Log.d(MapUtil::class.java.canonicalName, prediction.toString())
+            Timber.d(MapUtil::class.java.canonicalName, prediction.toString())
         }
 
         return addresses
